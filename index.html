@@ -573,8 +573,80 @@
     </div>
 
     <script>
-        const MENU_URL = 'https://raw.githubusercontent.com/7ven-afk/snoopy-shop/main/menu.json';
-        let PRODUCTS = [];
+        // URL optionnelle pour mise à jour distante (remplacer par votre propre repo si besoin)
+        const MENU_URL = null;
+
+        // ─── CATALOGUE INLINE (toujours disponible, même sans réseau) ──────────
+        let PRODUCTS = [
+            {
+                id: "prod_sf1000",
+                name: "SF1000\uD83C\uDFCE\uFE0F",
+                category: "Fleurs",
+                desc: "90/120u — Variété premium haut de gamme, puissante et aromatique. Qualité irréprochable garantie.",
+                image: "\uD83C\uDFCE\uFE0F",
+                tag: "TOP",
+                stats: { views: 0, likes: 0, sales: 0 },
+                variantsLivraison: [
+                    { label: "5g", price: 40 },
+                    { label: "10g", price: 70 },
+                    { label: "25g", price: 120 },
+                    { label: "50g", price: 170 },
+                    { label: "100g", price: 320 }
+                ],
+                variantsMeetup: [
+                    { label: "2g", price: 20 },
+                    { label: "5g", price: 30 },
+                    { label: "10g", price: 60 },
+                    { label: "25g", price: 110 },
+                    { label: "50g", price: 160 },
+                    { label: "100g", price: 310 }
+                ]
+            },
+            {
+                id: "prod_frozen_cali",
+                name: "\uD83AB2 Frozen Cali US \uD83C\uDDFA\uD83C\uDDF8",
+                category: "Fleurs",
+                desc: "Importation directe USA. Terpènes exceptionnels, effet puissant et long. Qualité Cali top-shelf.",
+                image: "\uD83AB2",
+                tag: "US IMPORT",
+                stats: { views: 0, likes: 0, sales: 0 },
+                variantsLivraison: [
+                    { label: "1g", price: 30 },
+                    { label: "2g", price: 50 },
+                    { label: "5g", price: 80 },
+                    { label: "10g", price: 160 },
+                    { label: "20g", price: 280 },
+                    { label: "50g", price: 510 },
+                    { label: "100g", price: 960 }
+                ],
+                variantsMeetup: [
+                    { label: "1g", price: 20 },
+                    { label: "2g", price: 30 },
+                    { label: "5g", price: 70 },
+                    { label: "10g", price: 150 },
+                    { label: "20g", price: 270 },
+                    { label: "50g", price: 500 },
+                    { label: "100g", price: 950 }
+                ]
+            },
+            {
+                id: "w_jungle",
+                name: "Jungle Wasabi \uD83C\uDF34",
+                category: "Fleurs",
+                image: "\uD83E\uDD66",
+                desc: "Cali Top Shelf. Puissant.",
+                tag: "PREMIUM",
+                stats: { views: 89, likes: 32, sales: 5 },
+                variantsLivraison: [
+                    { label: "5g", price: 65 },
+                    { label: "10g", price: 95 }
+                ],
+                variantsMeetup: [
+                    { label: "5g", price: 55 },
+                    { label: "10g", price: 85 }
+                ]
+            }
+        ];
         const CATEGORIES = [
             { id: "all", name: "Tout", icon: "grid" },
             { id: "Fleurs", name: "🌿 Fleurs", icon: "leaf" },
@@ -627,22 +699,24 @@
         }
 
         function setLogoFromUpload() {
-            // Use the embedded logo image if available
-            const logoSrc = 'C:/Users/drona/.gemini/antigravity/brain/tempmediaStorage/media__1771526716782.jpg';
-            // For web app use, we rely on local or the user hosting the image.
-            // We set a neon flame fallback so the UI always looks good.
+            // Logo chargé depuis images/ocat_logo.jpg via les balises <img> dans le HTML
+            // Si le fichier n'existe pas, le fallback emoji 🔥 s'affiche automatiquement
         }
 
         async function loadExternalMenu() {
+            // Si MENU_URL est null, on garde les données inline — pas de fetch
+            if (!MENU_URL) return;
             try {
                 const r = await fetch(`${MENU_URL}?t=${new Date().getTime()}`);
-                if (r.ok) { PRODUCTS = await r.json(); if (state.view === 'shop') renderProducts(); }
+                if (r.ok) {
+                    const data = await r.json();
+                    if (data && data.length > 0) {
+                        PRODUCTS = data;
+                        if (state.view === 'shop') renderProducts();
+                    }
+                }
             } catch (e) {
-                // Try local
-                try {
-                    const r2 = await fetch(`menu.json?t=${new Date().getTime()}`);
-                    if (r2.ok) { PRODUCTS = await r2.json(); if (state.view === 'shop') renderProducts(); }
-                } catch (e2) { console.log("No menu loaded"); }
+                console.log("Chargement menu distant échoué — données inline conservées.");
             }
         }
 
