@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>O'Charbon Avant Tout 31</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#39ff14',
+                        'primary-dark': '#28cc0e',
+                        'primary-dim': '#1a7a08',
+                        background: '#080808',
+                        surface: '#111111',
+                        'surface-2': '#1a1a1a',
+                        secondary: '#8a8a8a',
+                        anthracite: '#2d2d2d',
+                        gold: '#fbbf24'
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --neon: #39ff14;
+            --neon-dim: rgba(57, 255, 20, 0.15);
+            --bg: #080808;
+            --surface: #111111;
+            --surface2: #1a1a1a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: none;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.35s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .custom-checkbox {
+            accent-color: var(--neon);
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+
+        .modal-base {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-closed {
+            transform: translateY(100%);
+        }
+
+        .modal-open {
+            transform: translateY(0);
+        }
+
+        /* Neon glow effects */
+        .neon-border {
+            border-color: var(--neon) !important;
+            box-shadow: 0 0 12px rgba(57, 255, 20, 0.3);
+        }
+
+        .neon-text {
+            color: var(--neon);
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
+        }
+
+        .neon-btn {
+            background: var(--neon);
+            color: #080808;
+            font-weight: 900;
+            transition: all 0.2s;
+        }
+
+        .neon-btn:hover,
+        .neon-btn:active {
+            background: #28cc0e;
+            transform: scale(0.97);
+        }
+
+        /* Delivery toggle */
+        .delivery-toggle {
+            display: flex;
+            background: var(--surface2);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .delivery-toggle button {
+            flex: 1;
+            padding: 10px 8px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #888;
+            background: transparent;
+        }
+
+        .delivery-toggle button.active {
+            background: var(--neon);
+            color: #080808;
+            box-shadow: 0 0 14px rgba(57, 255, 20, 0.4);
+        }
+
+        /* Video */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: inherit;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .fs-btn {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 6px;
+            border-radius: 50%;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .fs-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Product card */
+        .product-card {
+            background: var(--surface);
+            border: 1px solid #222;
+            border-radius: 18px;
+            transition: border-color 0.2s, transform 0.15s;
+        }
+
+        .product-card:active {
+            transform: scale(0.98);
+            border-color: var(--neon);
+        }
+
+        /* Header logo */
+        .header-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--neon);
+            box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
+            flex-shrink: 0;
+        }
+
+        .header-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Scrollable category pills */
+        .cat-pill {
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.18s;
+            background: var(--surface);
+            color: #888;
+        }
+
+        .cat-pill.active {
+            background: var(--neon);
+            color: #080808;
+            border-color: var(--neon);
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.35);
+        }
+
+        /* Input fields */
+        .ocat-input {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .ocat-input:focus {
+            border-color: var(--neon);
+        }
+
+        /* Price badge */
+        .price-badge {
+            color: var(--neon);
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        /* Variant select */
+        select.ocat-input option {
+            background: var(--surface2);
+        }
+
+        /* Address field animation */
+        #address-wrap {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 120px;
+            opacity: 1;
+        }
+
+        #address-wrap.hidden-animated {
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="pb-24">
+
+    <!-- HEADER -->
+    <header id="main-header" class="sticky top-0 z-30 backdrop-blur-md px-4 pt-3 pb-2 border-b border-[#1e1e1e] hidden"
+        style="background: rgba(8,8,8,0.97)">
+        <div class="flex items-center justify-between mb-3">
+            <button onclick="switchView('landing')" class="flex items-center gap-2.5 group text-left">
+                <div class="header-logo">
+                    <img src="images/ocat_logo.jpg" id="header-logo-img" alt="O'CAT 31"
+                        onerror="this.parentElement.innerHTML='<span style=\'font-size:18px;display:flex;align-items:center;justify-content:center;height:100%;background:#111\'>🔥</span>'">
+                </div>
+                <div>
+                    <h1 class="text-base font-black leading-none text-white tracking-tight">O'CAT 31</h1>
+                    <span class="text-[10px] font-bold uppercase neon-text" id="user-status-badge">Shop Officiel</span>
+                </div>
+            </button>
+            <div class="flex items-center gap-2">
+                <div id="admin-controls" class="hidden flex gap-2">
+                    <button onclick="addNewProduct()"
+                        class="bg-blue-600 text-white px-2 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1"><i
+                            data-lucide="plus-circle" class="w-4 h-4"></i></button>
+                    <button onclick="exportMenuJson()"
+                        class="bg-red-500 text-white px-2 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1 animate-pulse"><i
+                            data-lucide="save" class="w-4 h-4"></i></button>
+                </div>
+                <button onclick="toggleCart(true)" class="relative p-1 ml-1">
+                    <i data-lucide="shopping-cart" class="text-white w-6 h-6"></i>
+                    <span id="header-cart-count"
+                        class="absolute -top-1 -right-1 text-[#080808] text-[10px] font-black w-4 h-4 flex items-center justify-center rounded-full hidden"
+                        style="background:var(--neon)">0</span>
+                </button>
+                <button onclick="switchView('profile')" class="relative ml-1">
+                    <div id="header-avatar"
+                        class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white border border-[#333] overflow-hidden"
+                        style="background:linear-gradient(135deg,#1a4a0a,#0d2006)">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                    </div>
+                </button>
+                <button id="logout-btn" onclick="logout()" class="hidden p-1 text-[#555] hover:text-red-400 ml-1"><i
+                        data-lucide="log-out" class="w-6 h-6"></i></button>
+            </div>
+        </div>
+        <div class="relative mb-3">
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#555] w-4 h-4"></i>
+            <input type="text" id="search-input" placeholder="Rechercher un produit..." class="ocat-input pl-9 text-xs">
+        </div>
+        <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1" id="category-container"></div>
+    </header>
+
+    <main class="p-4 min-h-screen" id="app-container">
+
+        <!-- 1. LANDING -->
+        <div id="view-landing" class="fade-in space-y-8 pb-10">
+            <!-- Hero -->
+            <div class="text-center space-y-5 py-6">
+                <div class="relative w-28 h-28 mx-auto">
+                    <div class="w-28 h-28 rounded-full overflow-hidden border-2 mx-auto shadow-xl"
+                        style="border-color:var(--neon); box-shadow:0 0 30px rgba(57,255,20,0.3)">
+                        <img src="images/ocat_logo.jpg" id="landing-logo-img" alt="O'CAT 31"
+                            class="w-full h-full object-cover"
+                            onerror="this.parentElement.innerHTML='<span style=\'font-size:52px;display:flex;align-items:center;justify-content:center;height:100%;background:#111\'>🔥</span>'">
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-black text-white leading-tight">O'Charbon Avant Tout 31</h2>
+                    <p class="neon-text text-sm font-bold mt-1">Qualité • Discrétion • Proximité</p>
+                </div>
+                <p class="text-[#888] text-sm leading-relaxed px-4">
+                    Votre shop local de confiance dans le 31. Remise en main propre ou livraison rapide.<br>
+                    <strong class="text-white">Sélection premium, emballage soigné, service irréprochable.</strong>
+                </p>
+                <button onclick="switchView('shop')"
+                    class="neon-btn px-8 py-3.5 rounded-full text-sm inline-flex items-center gap-2 shadow-lg"
+                    style="box-shadow:0 0 20px rgba(57,255,20,0.35)">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i> Voir le Menu
+                </button>
+            </div>
+
+            <!-- Comment Commander -->
+            <section class="space-y-3 px-1">
+                <h3 class="font-black text-lg flex items-center gap-2 text-white"><i data-lucide="help-circle"
+                        class="w-5 h-5" style="color:var(--neon)"></i> Comment commander ?</h3>
+                <div class="rounded-2xl p-4 border border-[#222] text-sm space-y-3 text-[#aaa]"
+                    style="background:var(--surface)">
+                    <p><strong class="text-white">1. Consultez le menu</strong> et choisissez votre produit + quantité.
+                    </p>
+                    <p><strong class="text-white">2. Choisissez votre mode de remise :</strong> 🚗 Livraison (adresse
+                        requise) ou 📍 Meet-up (rendez-vous convenu ensemble).</p>
+                    <p><strong class="text-white">3. Validez votre panier</strong> — votre commande est envoyée
+                        directement au gérant via Telegram.</p>
+                    <p><strong style="color:var(--neon)">4. Paiement en espèces</strong> à la livraison / remise en main
+                        propre uniquement.</p>
+                </div>
+            </section>
+
+            <!-- Modes de remise -->
+            <section class="space-y-3 px-1">
+                <h3 class="font-black text-lg flex items-center gap-2 text-white"><i data-lucide="map-pin"
+                        class="w-5 h-5" style="color:var(--neon)"></i> Modes de Remise</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="rounded-2xl p-4 border-l-4 border-l-[#39ff14] border-t border-r border-b border-[#222]"
+                        style="background:var(--surface)">
+                        <div class="font-black text-white mb-2 text-base">🚗 Livraison</div>
+                        <p class="text-xs text-[#888] leading-relaxed">Livraison à domicile dans le 31. Tarifs
+                            légèrement supérieurs. Adresse requise.</p>
+                    </div>
+                    <div class="rounded-2xl p-4 border-l-4 border-l-blue-500 border-t border-r border-b border-[#222]"
+                        style="background:var(--surface)">
+                        <div class="font-black text-white mb-2 text-base">📍 Meet-up</div>
+                        <p class="text-xs text-[#888] leading-relaxed">Rendez-vous convenu ensemble. Meilleurs tarifs.
+                            Lieu défini par message.</p>
+                    </div>
+                </div>
+                <div class="text-center text-xs text-[#555] mt-1 italic">
+                    Paiement en espèces uniquement — remise en main propre.
+                </div>
+            </section>
+
+            <!-- Liens utiles -->
+            <section class="text-center pt-4 pb-4 border-t border-[#1a1a1a] px-1">
+                <p class="text-sm text-[#555] mb-4">Besoin d'aide ou questions ?</p>
+                <div class="flex flex-col gap-3 max-w-sm mx-auto">
+                    <a href="https://t.me/OCAT312" target="_blank"
+                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
+                        style="background:var(--surface)">
+                        <i data-lucide="life-buoy" class="w-5 h-5" style="color:var(--neon)"></i> Contacter le Gérant
+                    </a>
+                </div>
+            </section>
+
+            <!-- Admin login caché -->
+            <div class="pt-4 w-full flex justify-center mt-2 mb-6">
+                <button onclick="adminLoginPrompt()" class="text-[#1e1e1e] hover:text-[#333] transition-colors p-2"
+                    title="Admin Access">
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. SHOP -->
+        <div id="view-shop" class="hidden fade-in">
+            <div id="loading-spinner" class="flex flex-col items-center justify-center py-20 hidden">
+                <div class="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin mb-4"
+                    style="border-color:var(--neon);border-top-color:transparent"></div>
+                <p class="text-[#555] text-sm">Chargement du menu...</p>
+            </div>
+            <div id="products-grid" class="flex flex-col gap-4 pb-20"></div>
+        </div>
+
+        <!-- 3. PROFIL -->
+        <div id="view-profile" class="hidden fade-in pb-20">
+            <button onclick="switchView('shop')" class="mb-4 text-[#888] flex items-center gap-2 text-sm"><i
+                    data-lucide="arrow-left" class="w-4 h-4"></i> Retour au Shop</button>
+            <div class="border border-[#222] rounded-2xl p-6 mb-6 flex flex-col items-center text-center relative overflow-hidden"
+                style="background:var(--surface)">
+                <div class="absolute top-0 left-0 w-full h-20"
+                    style="background:linear-gradient(135deg,rgba(57,255,20,0.08),rgba(0,100,0,0.12))"></div>
+                <div class="w-24 h-24 rounded-full border-4 z-10 flex items-center justify-center text-3xl mb-3 shadow-xl"
+                    style="background:linear-gradient(135deg,#1a4a0a,#0d2006);border-color:var(--neon)"
+                    id="profile-pic-large">👤</div>
+                <h2 class="text-xl font-black text-white" id="profile-name">Invité</h2>
+                <p class="text-sm font-mono mb-4" style="color:var(--neon)" id="profile-username">@loading...</p>
+                <div class="grid grid-cols-2 gap-4 w-full mt-2">
+                    <div class="p-3 rounded-xl border border-[#222]" style="background:rgba(255,255,255,0.03)">
+                        <p class="text-xs text-[#555] uppercase font-bold">ID Telegram</p>
+                        <p class="text-sm font-mono text-white" id="profile-id">---</p>
+                    </div>
+                    <div class="p-3 rounded-xl border border-[#222]" style="background:rgba(255,255,255,0.03)">
+                        <p class="text-xs text-[#555] uppercase font-bold">Commandes</p>
+                        <p class="text-xl font-black" style="color:var(--neon)" id="profile-orders">0</p>
+                    </div>
+                </div>
+            </div>
+            <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2"><i data-lucide="heart"
+                    class="text-red-500 w-5 h-5"></i> Mes Favoris</h3>
+            <div id="favorites-list" class="space-y-3"></div>
+        </div>
+    </main>
+
+    <!-- PRODUCT DETAIL MODAL -->
+    <div id="product-detail-overlay" class="fixed inset-0 bg-black/85 z-40 hidden backdrop-blur-sm"
+        onclick="closeProductDetail()"></div>
+    <div id="product-detail-modal"
+        class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl shadow-2xl modal-base modal-closed h-[88vh] flex flex-col border-t border-[#222]"
+        style="background:var(--bg)">
+        <div id="detail-content" class="flex-1 overflow-y-auto p-0 relative"></div>
+    </div>
+
+    <!-- PANIER MODAL -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/70 z-40 hidden backdrop-blur-sm" onclick="toggleCart(false)">
+    </div>
+    <div id="cart-modal"
+        class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl shadow-2xl modal-base modal-closed invisible h-[92vh] flex flex-col border-t border-[#222]"
+        style="background:var(--bg)">
+        <div class="p-4 border-b border-[#1e1e1e] flex items-center justify-between rounded-t-2xl"
+            style="background:var(--surface)">
+            <h2 class="text-xl font-black flex items-center gap-2"><i data-lucide="shopping-cart" class="w-5 h-5"
+                    style="color:var(--neon)"></i> Mon Panier</h2>
+            <button onclick="toggleCart(false)" class="p-2 bg-[#222] rounded-full text-[#888] hover:text-white"><i
+                    data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div id="cart-content-wrapper" class="flex-1 overflow-y-auto p-4">
+            <div id="cart-items" class="space-y-3 mb-6"></div>
+            <div id="cart-empty-message"
+                class="hidden flex-col items-center justify-center h-48 text-[#444] opacity-60">
+                <i data-lucide="package" class="w-16 h-16 mb-4 stroke-1"></i>
+                <p>Votre panier est vide.</p>
+            </div>
+            <div id="cart-form" class="hidden space-y-4 border-t border-[#1e1e1e] pt-5">
+                <h3 class="font-black text-white flex items-center gap-2 text-sm uppercase"><i data-lucide="settings"
+                        class="w-4 h-4" style="color:var(--neon)"></i> Finalisation</h3>
+
+                <!-- Mode de remise (readonly dans panier, affiche le choix) -->
+                <div>
+                    <label class="block text-xs text-[#888] mb-2 font-bold">Mode de remise</label>
+                    <div class="delivery-toggle" id="cart-delivery-toggle">
+                        <button id="cart-btn-livraison" onclick="setCartDelivery('livraison')" class="active">🚗
+                            Livraison</button>
+                        <button id="cart-btn-meetup" onclick="setCartDelivery('meetup')">📍 Meet-up</button>
+                    </div>
+                </div>
+
+                <!-- Adresse (masquée en meet-up) -->
+                <div id="address-wrap">
+                    <label class="block text-xs text-[#888] mb-1 font-bold">Adresse de livraison <span
+                            class="text-red-500">*</span></label>
+                    <textarea id="address-input" rows="2" placeholder="Numéro, rue, ville, code postal..."
+                        class="ocat-input text-sm"></textarea>
+                </div>
+
+                <!-- Paiement (info statique) -->
+                <div class="rounded-xl p-3 border border-[#222] flex items-center gap-3"
+                    style="background:var(--surface)">
+                    <i data-lucide="banknote" class="w-5 h-5 shrink-0" style="color:var(--neon)"></i>
+                    <p class="text-xs text-[#aaa]"><strong class="text-white">Paiement en espèces</strong> à la
+                        livraison (remise en main propre).</p>
+                </div>
+
+                <!-- KYC -->
+                <div class="rounded-xl p-3 flex items-start gap-3 mt-2 border"
+                    style="background:rgba(57,255,20,0.06);border-color:rgba(57,255,20,0.2)">
+                    <input type="checkbox" id="kyc-check" class="custom-checkbox mt-1 cursor-pointer">
+                    <label for="kyc-check" class="text-sm text-[#ccc] cursor-pointer select-none">
+                        <strong>J'ai lu les conditions</strong> et je confirme ma commande.<br>
+                        <span class="text-xs text-[#666]">Le gérant vous contactera pour confirmer le lieu/heure.</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="cart-footer" class="p-4 border-t border-[#1e1e1e] hidden" style="background:var(--surface)">
+            <div class="flex justify-between items-end mb-4">
+                <span class="text-sm text-[#888]">Total</span>
+                <span class="text-2xl font-black" style="color:var(--neon)" id="cart-total-price">0€</span>
+            </div>
+            <button onclick="checkout()"
+                class="neon-btn w-full text-lg py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg"
+                style="box-shadow:0 0 20px rgba(57,255,20,0.3)">
+                <i data-lucide="send" class="w-5 h-5"></i> Commander sur Telegram
+            </button>
+        </div>
+    </div>
+
+    <!-- ADMIN EDIT MODAL -->
+    <div id="edit-modal"
+        class="fixed inset-0 bg-black/95 z-50 hidden backdrop-blur-md flex items-center justify-center p-4 fade-in">
+        <div class="w-full max-w-sm rounded-2xl p-6 border border-[#333] shadow-2xl h-[80vh] overflow-y-auto hide-scrollbar"
+            style="background:var(--surface)">
+            <h3 class="text-lg font-black text-white mb-4"><i data-lucide="edit-3" class="inline w-5 h-5"
+                    style="color:var(--neon)"></i> Modifier Produit</h3>
+            <form onsubmit="saveProductEdit(event)" class="space-y-4">
+                <input type="hidden" id="edit-id">
+                <div><label class="text-xs text-[#888] uppercase font-bold">Nom</label><input type="text" id="edit-name"
+                        class="ocat-input mt-1"></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="text-xs text-[#888] uppercase font-bold">Prix Livraison (1er)</label><input
+                            type="number" id="edit-price-liv" step="0.5" class="ocat-input mt-1"></div>
+                    <div><label class="text-xs text-[#888] uppercase font-bold">Prix Meet-up (1er)</label><input
+                            type="number" id="edit-price-meet" step="0.5" class="ocat-input mt-1"></div>
+                </div>
+                <div><label class="text-xs text-[#888] uppercase font-bold">Tag</label><input type="text" id="edit-tag"
+                        placeholder="NEW / TOP / PREMIUM" class="ocat-input mt-1"></div>
+                <div><label class="text-xs text-[#888] uppercase font-bold">Image (URL ou emoji)</label><input
+                        type="text" id="edit-image" class="ocat-input mt-1"></div>
+                <div><label class="text-xs text-[#888] uppercase font-bold">Description</label><textarea id="edit-desc"
+                        rows="3" class="ocat-input mt-1"></textarea></div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('edit-modal').classList.add('hidden')"
+                        class="flex-1 py-3 rounded-xl text-sm font-bold text-white border border-[#333]"
+                        style="background:var(--surface2)">Annuler</button>
+                    <button type="submit" class="flex-1 neon-btn py-3 rounded-xl text-sm">Valider</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const MENU_URL = 'https://raw.githubusercontent.com/7ven-afk/snoopy-shop/main/menu.json';
+        let PRODUCTS = [];
+        const CATEGORIES = [
+            { id: "all", name: "Tout", icon: "grid" },
+            { id: "Fleurs", name: "🌿 Fleurs", icon: "leaf" },
+            { id: "Résines", name: "🍫 Résines", icon: "droplets" },
+            { id: "Comestibles", name: "🍬 Comestibles", icon: "cookie" }
+        ];
+
+        // delivery mode: 'livraison' or 'meetup'
+        let deliveryMode = 'livraison';
+
+        let state = {
+            isAdmin: false,
+            cart: [],
+            favorites: [],
+            category: 'all',
+            view: 'landing',
+            currentDetailId: null,
+            selectedVariantIndex: 0,
+            search: '',
+            userProfile: { first_name: "Invité", username: "---", id: "---", orderCount: 0 }
+        };
+
+        function init() {
+            loadExternalMenu();
+            if (localStorage.getItem('ocat_admin') === 'true') state.isAdmin = true;
+            if (window.Telegram?.WebApp) {
+                const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
+                if (tg.initDataUnsafe?.user) {
+                    const u = tg.initDataUnsafe.user;
+                    state.userProfile.first_name = u.first_name;
+                    state.userProfile.username = u.username ? "@" + u.username : "-";
+                    state.userProfile.id = u.id;
+                    const initials = (u.first_name[0] || "U").toUpperCase();
+                    document.getElementById('header-avatar').innerText = initials;
+                    document.getElementById('profile-pic-large').innerText = initials;
+                }
+            }
+            const savedCount = localStorage.getItem('ocat_order_count');
+            if (savedCount) state.userProfile.orderCount = parseInt(savedCount);
+            const savedFavs = localStorage.getItem('ocat_favorites');
+            if (savedFavs) state.favorites = JSON.parse(savedFavs);
+            const savedDelivery = localStorage.getItem('ocat_delivery');
+            if (savedDelivery) deliveryMode = savedDelivery;
+
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                state.search = e.target.value.toLowerCase(); renderProducts();
+            });
+            setLogoFromUpload();
+            lucide.createIcons();
+        }
+
+        function setLogoFromUpload() {
+            // Use the embedded logo image if available
+            const logoSrc = 'C:/Users/drona/.gemini/antigravity/brain/tempmediaStorage/media__1771526716782.jpg';
+            // For web app use, we rely on local or the user hosting the image.
+            // We set a neon flame fallback so the UI always looks good.
+        }
+
+        async function loadExternalMenu() {
+            try {
+                const r = await fetch(`${MENU_URL}?t=${new Date().getTime()}`);
+                if (r.ok) { PRODUCTS = await r.json(); if (state.view === 'shop') renderProducts(); }
+            } catch (e) {
+                // Try local
+                try {
+                    const r2 = await fetch(`menu.json?t=${new Date().getTime()}`);
+                    if (r2.ok) { PRODUCTS = await r2.json(); if (state.view === 'shop') renderProducts(); }
+                } catch (e2) { console.log("No menu loaded"); }
+            }
+        }
+
+        // ─── MEDIA ─────────────────────────────────────────────────────────────
+        function getMediaHtml(src, hClass = "h-32", rClass = "rounded-xl", enableFullscreen = false) {
+            if (!src) return `<span class="text-4xl">📦</span>`;
+            // Detect video: extension OR Telegram/Luffa video URLs
+            const isVid = /\.(mp4|mov|webm)(\?.*)?$/i.test(src) || /video/i.test(src);
+            const isUrl = src.startsWith('http') || src.startsWith('/') || src.startsWith('images/');
+            const isEmoji = !isUrl && src.length <= 4;
+
+            if (isEmoji) return `<span class="drop-shadow-lg text-6xl">${src}</span>`;
+
+            if (isVid) {
+                const vidId = "vid-" + Math.random().toString(36).substr(2, 9);
+                const fsBtn = enableFullscreen ? `<button onclick="event.stopPropagation(); toggleFullscreen('${vidId}')" class="fs-btn"><i data-lucide="maximize" class="w-4 h-4"></i></button>` : '';
+                return `<div class="video-wrapper"><video id="${vidId}" src="${src}" class="${hClass} ${rClass}" autoplay loop muted playsinline></video>${fsBtn}</div>`;
+            }
+            return `<img src="${src}" class="w-full ${hClass} object-cover ${rClass}" alt="Produit" loading="lazy">`;
+        }
+
+        function toggleFullscreen(vidId) {
+            const video = document.getElementById(vidId);
+            if (!video) return;
+            if (video.requestFullscreen) video.requestFullscreen();
+            else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+            else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+        }
+
+        // ─── NAVIGATION ────────────────────────────────────────────────────────
+        function switchView(id) {
+            ['landing', 'shop', 'profile'].forEach(v => document.getElementById('view-' + v).classList.add('hidden'));
+            document.getElementById('view-' + id).classList.remove('hidden');
+            state.view = id;
+            const h = document.getElementById('main-header');
+            if (id === 'shop') { h.classList.remove('hidden'); renderCategories(); renderProducts(); checkAdminUI(); }
+            else if (id === 'profile') { h.classList.remove('hidden'); renderProfile(); }
+            else { h.classList.add('hidden'); }
+            window.scrollTo(0, 0);
+        }
+
+        // ─── PROFILE ───────────────────────────────────────────────────────────
+        function renderProfile() {
+            document.getElementById('profile-name').innerText = state.userProfile.first_name;
+            document.getElementById('profile-username').innerText = state.userProfile.username;
+            document.getElementById('profile-id').innerText = state.userProfile.id;
+            document.getElementById('profile-orders').innerText = state.userProfile.orderCount;
+            const c = document.getElementById('favorites-list');
+            if (state.favorites.length === 0) {
+                c.innerHTML = '<div class="text-center py-8 text-[#555] text-sm">Aucun favori.</div>';
+            } else {
+                const favs = PRODUCTS.filter(p => state.favorites.includes(p.id));
+                c.innerHTML = favs.map(p => {
+                    const price = getPrice(p, 0, 'livraison');
+                    return `<div class="flex items-center gap-3 p-2 rounded-xl border border-[#222] cursor-pointer" style="background:var(--surface)" onclick="openProductDetail('${p.id}')">
+                        <div class="h-12 w-12 rounded-lg flex items-center justify-center overflow-hidden shrink-0" style="background:#1a1a1a">${getMediaHtml(p.image, "h-full", "rounded-md")}</div>
+                        <div class="flex-1"><h4 class="font-bold text-white text-sm">${p.name}</h4><div class="text-xs text-[#666]">À partir de ${price}€</div></div>
+                        <button onclick="event.stopPropagation(); toggleFavorite('${p.id}')" class="p-2 text-red-500"><i data-lucide="heart" class="w-5 h-5 fill-current"></i></button>
+                    </div>`;
+                }).join('');
+                lucide.createIcons();
+            }
+        }
+
+        function toggleFavorite(id) {
+            const i = state.favorites.indexOf(id);
+            if (i === -1) state.favorites.push(id); else state.favorites.splice(i, 1);
+            localStorage.setItem('ocat_favorites', JSON.stringify(state.favorites));
+            if (!document.getElementById('view-shop').classList.contains('hidden')) renderProducts();
+            if (!document.getElementById('view-profile').classList.contains('hidden')) renderProfile();
+        }
+
+        // ─── PRICING HELPERS ───────────────────────────────────────────────────
+        function getVariants(p, mode) {
+            if (mode === 'meetup' && p.variantsMeetup) return p.variantsMeetup;
+            if (p.variantsLivraison) return p.variantsLivraison;
+            // Legacy support
+            if (p.variants) return p.variants;
+            return null;
+        }
+
+        function getPrice(p, idx, mode) {
+            const vars = getVariants(p, mode);
+            if (vars && vars[idx]) return vars[idx].price;
+            return p.price || 0;
+        }
+
+        // ─── PRODUCT GRID ──────────────────────────────────────────────────────
+        function renderProducts() {
+            const c = document.getElementById('products-grid');
+            let f = PRODUCTS.filter(p =>
+                (state.category === 'all' || p.category === state.category) &&
+                p.name.toLowerCase().includes(state.search)
+            );
+            if (f.length === 0) { c.innerHTML = '<div class="text-center py-10 text-[#444]">Aucun produit trouvé.</div>'; return; }
+            c.innerHTML = f.map(p => {
+                const vars = getVariants(p, deliveryMode);
+                const price = vars ? vars[0].price : (p.price || 0);
+                const lbl = vars ? "À partir de " : "";
+                const favActive = state.favorites.includes(p.id);
+                return `<div class="product-card relative overflow-hidden p-3 flex flex-col gap-2 cursor-pointer" onclick="openProductDetail('${p.id}')">
+                    ${state.isAdmin ? `<button onclick="event.stopPropagation(); openEditModal('${p.id}')" class="absolute top-2 left-2 z-20 bg-red-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow flex gap-1"><i data-lucide="edit-3" class="w-3 h-3"></i> EDIT</button>` : ''}
+                    <button onclick="event.stopPropagation(); toggleFavorite('${p.id}')" class="absolute top-2 right-2 z-20 p-2 rounded-full bg-black/50 backdrop-blur-sm ${favActive ? 'text-red-500' : 'text-white'}">
+                        <i data-lucide="heart" class="w-4 h-4 ${favActive ? 'fill-current' : ''}"></i>
+                    </button>
+                    ${p.tag ? `<div class="absolute top-2 left-2 text-[#080808] text-[10px] font-black px-2 py-1 rounded-lg z-10 shadow" style="background:var(--neon)">${p.tag}</div>` : ''}
+                    <div class="h-36 flex items-center justify-center mb-1 rounded-xl overflow-hidden" style="background:#0d0d0d">${getMediaHtml(p.image, "h-36", "rounded-xl")}</div>
+                    <div class="flex-1">
+                        <h3 class="font-black text-white leading-tight mb-1">${p.name}</h3>
+                        <p class="text-xs text-[#666] line-clamp-2">${p.desc}</p>
+                    </div>
+                    <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
+                        <span class="price-badge"><span class="text-[10px] text-[#555] font-normal mr-1">${lbl}</span>${price}€</span>
+                        <button class="rounded-full p-2.5 shadow-lg" style="background:var(--neon)"><i data-lucide="plus" class="w-5 h-5 text-[#080808] stroke-[3]"></i></button>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // ─── CATEGORIES ────────────────────────────────────────────────────────
+        function setCategory(id) { state.category = id; renderCategories(); renderProducts(); }
+        function renderCategories() {
+            document.getElementById('category-container').innerHTML = CATEGORIES.map(c =>
+                `<button onclick="setCategory('${c.id}')" class="cat-pill ${state.category === c.id ? 'active' : ''}">${c.name}</button>`
+            ).join('');
+        }
+
+        // ─── PRODUCT DETAIL ────────────────────────────────────────────────────
+        function openProductDetail(id) {
+            state.currentDetailId = id;
+            state.selectedVariantIndex = 0;
+            const p = PRODUCTS.find(x => x.id === id);
+            const c = document.getElementById('detail-content');
+            const media = getMediaHtml(p.image, "h-full", "rounded-none", true);
+            const vars = getVariants(p, deliveryMode);
+            const price = vars ? vars[0].price : (p.price || 0);
+
+            let vHtml = '';
+            if (vars) {
+                const opts = vars.map((v, i) => `<option value="${i}">${v.label} — ${v.price}€</option>`).join('');
+                vHtml = `<div class="mt-3"><label class="text-xs text-[#888] font-bold uppercase">Quantité</label>
+                    <select id="variant-select" onchange="updateDetailPrice(this.value)" class="ocat-input mt-1">${opts}</select></div>`;
+            }
+
+            c.innerHTML = `
+                <div class="relative h-72 flex items-center justify-center overflow-hidden group" style="background:#0a0a0a">
+                    ${media}
+                    <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/60 p-2 rounded-full text-white z-20 border border-[#333]"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div class="p-5 pb-24 space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 class="text-2xl font-black text-white">${p.name}</h2>
+                            <div class="text-xs font-bold uppercase mt-1" style="color:var(--neon)">${p.category || ''}</div>
+                        </div>
+                        <div class="text-3xl font-black" style="color:var(--neon)" id="detail-price">${price}€</div>
+                    </div>
+
+                    <!-- Mode de remise dans la fiche produit -->
+                    <div>
+                        <label class="block text-xs text-[#888] font-bold mb-2 uppercase">Mode de remise</label>
+                        <div class="delivery-toggle">
+                            <button id="detail-btn-livraison" onclick="setDetailDelivery('livraison')" class="${deliveryMode === 'livraison' ? 'active' : ''}">🚗 Livraison</button>
+                            <button id="detail-btn-meetup" onclick="setDetailDelivery('meetup')" class="${deliveryMode === 'meetup' ? 'active' : ''}">📍 Meet-up</button>
+                        </div>
+                        <p class="text-[10px] text-[#555] mt-1.5">💶 Paiement en espèces à la remise.</p>
+                    </div>
+
+                    ${vHtml}
+
+                    <div class="rounded-xl p-4 border border-[#222]" style="background:var(--surface)">
+                        <h3 class="font-bold text-xs text-[#666] uppercase mb-2">Description</h3>
+                        <p class="text-[#ccc] leading-relaxed text-sm">${p.desc}</p>
+                    </div>
+
+                    <button onclick="addToCart()" class="neon-btn w-full py-4 rounded-xl text-lg flex items-center justify-center gap-2" style="box-shadow:0 0 18px rgba(57,255,20,0.3)">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i> Ajouter au panier
+                    </button>
+                </div>`;
+
+            document.getElementById('product-detail-modal').classList.remove('modal-closed', 'invisible');
+            document.getElementById('product-detail-modal').classList.add('modal-open');
+            document.getElementById('product-detail-overlay').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function setDetailDelivery(mode) {
+            deliveryMode = mode;
+            localStorage.setItem('ocat_delivery', mode);
+            // Update toggle buttons
+            document.getElementById('detail-btn-livraison').classList.toggle('active', mode === 'livraison');
+            document.getElementById('detail-btn-meetup').classList.toggle('active', mode === 'meetup');
+            // Update price display
+            const p = PRODUCTS.find(x => x.id === state.currentDetailId);
+            const vars = getVariants(p, mode);
+            const idx = state.selectedVariantIndex;
+            const price = vars ? vars[Math.min(idx, vars.length - 1)].price : (p.price || 0);
+            document.getElementById('detail-price').innerText = price + "€";
+            // Update variant select
+            const sel = document.getElementById('variant-select');
+            if (sel && vars) {
+                sel.innerHTML = vars.map((v, i) => `<option value="${i}">${v.label} — ${v.price}€</option>`).join('');
+                sel.value = "0";
+                state.selectedVariantIndex = 0;
+            }
+            // Sync cart toggle
+            syncCartToggle();
+        }
+
+        function setCartDelivery(mode) {
+            deliveryMode = mode;
+            localStorage.setItem('ocat_delivery', mode);
+            syncCartToggle();
+            updateCartUI();
+        }
+
+        function syncCartToggle() {
+            const bl = document.getElementById('cart-btn-livraison');
+            const bm = document.getElementById('cart-btn-meetup');
+            if (bl) bl.classList.toggle('active', deliveryMode === 'livraison');
+            if (bm) bm.classList.toggle('active', deliveryMode === 'meetup');
+            // Show/hide address
+            const aw = document.getElementById('address-wrap');
+            if (aw) {
+                if (deliveryMode === 'meetup') aw.classList.add('hidden-animated');
+                else aw.classList.remove('hidden-animated');
+            }
+        }
+
+        function updateDetailPrice(idx) {
+            state.selectedVariantIndex = parseInt(idx);
+            const p = PRODUCTS.find(x => x.id === state.currentDetailId);
+            const vars = getVariants(p, deliveryMode);
+            if (vars && vars[idx]) document.getElementById('detail-price').innerText = vars[idx].price + "€";
+        }
+
+        function closeProductDetail() {
+            document.getElementById('product-detail-modal').classList.remove('modal-open');
+            document.getElementById('product-detail-modal').classList.add('modal-closed');
+            setTimeout(() => {
+                document.getElementById('product-detail-overlay').classList.add('hidden');
+            }, 300);
+        }
+
+        // ─── CART ──────────────────────────────────────────────────────────────
+        function addToCart() {
+            const p = PRODUCTS.find(x => x.id === state.currentDetailId);
+            const vars = getVariants(p, deliveryMode);
+            let item = { id: p.id, name: p.name, image: p.image, qty: 1, deliveryMode };
+            if (vars) {
+                const v = vars[state.selectedVariantIndex];
+                item.variant = v.label;
+                item.price = v.price;
+                item.uniqueId = p.id + "_" + v.label + "_" + deliveryMode;
+            } else {
+                item.price = p.price || 0;
+                item.uniqueId = p.id + "_" + deliveryMode;
+            }
+            const ex = state.cart.find(x => x.uniqueId === item.uniqueId);
+            if (ex) ex.qty++; else state.cart.push(item);
+            closeProductDetail();
+            updateCartUI();
+            if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+        }
+
+        function updateCartUI() {
+            const tot = state.cart.reduce((s, i) => s + i.qty, 0);
+            const badge = document.getElementById('header-cart-count');
+            badge.innerText = tot; badge.classList.toggle('hidden', tot === 0);
+            const con = document.getElementById('cart-items');
+            const emp = document.getElementById('cart-empty-message');
+            const frm = document.getElementById('cart-form');
+            const ftr = document.getElementById('cart-footer');
+            if (state.cart.length === 0) {
+                con.innerHTML = ''; emp.classList.remove('hidden'); frm.classList.add('hidden'); ftr.classList.add('hidden');
+            } else {
+                emp.classList.add('hidden'); frm.classList.remove('hidden'); ftr.classList.remove('hidden');
+                con.innerHTML = state.cart.map(i => `
+                    <div class="flex items-center gap-3 p-3 rounded-xl border border-[#222]" style="background:var(--surface)">
+                        <div class="h-12 w-12 rounded-lg flex items-center justify-center overflow-hidden shrink-0" style="background:#0d0d0d">${getMediaHtml(i.image, "h-full", "rounded-md")}</div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-white text-sm">${i.name}</h4>
+                            <div class="text-xs text-[#666]">${i.variant || ''} ${i.variant ? '•' : ''} ${i.price}€ ${i.deliveryMode === 'meetup' ? '📍' : '🚗'}</div>
+                        </div>
+                        <div class="flex items-center gap-2 rounded-lg p-1" style="background:#0a0a0a">
+                            <button onclick="updateQty('${i.uniqueId}', -1)" class="p-1 text-red-500"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                            <span class="text-xs font-black w-4 text-center">${i.qty}</span>
+                            <button onclick="updateQty('${i.uniqueId}', 1)" class="p-1" style="color:var(--neon)"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                        </div>
+                    </div>`).join('');
+                updateTotal();
+                syncCartToggle();
+            }
+            lucide.createIcons();
+        }
+
+        function updateQty(uid, d) {
+            const i = state.cart.find(x => x.uniqueId === uid);
+            if (!i) return; i.qty += d;
+            if (i.qty <= 0) state.cart = state.cart.filter(x => x.uniqueId !== uid);
+            updateCartUI();
+        }
+
+        function updateTotal() {
+            const tot = state.cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            document.getElementById('cart-total-price').innerText = tot.toFixed(0) + "€";
+        }
+
+        function toggleCart(open) {
+            const m = document.getElementById('cart-modal'), o = document.getElementById('cart-overlay');
+            if (open) {
+                m.classList.remove('invisible'); o.classList.remove('hidden');
+                setTimeout(() => { m.classList.remove('modal-closed'); m.classList.add('modal-open'); }, 10);
+                syncCartToggle();
+            } else {
+                m.classList.remove('modal-open'); m.classList.add('modal-closed');
+                setTimeout(() => { o.classList.add('hidden'); m.classList.add('invisible'); }, 300);
+            }
+        }
+
+        function checkout() {
+            const addr = document.getElementById('address-input').value.trim();
+            if (deliveryMode === 'livraison' && !addr) { alert("⚠️ L'adresse de livraison est requise !"); return; }
+            if (!document.getElementById('kyc-check').checked) { alert("⚠️ Veuillez confirmer les conditions."); return; }
+            state.userProfile.orderCount++;
+            localStorage.setItem('ocat_order_count', state.userProfile.orderCount);
+            const modeLabel = deliveryMode === 'meetup' ? '📍 Meet-up (lieu à convenir)' : '🚗 Livraison';
+            let msg = "🔥 *COMMANDE O'CAT 31* 🔥\n\n";
+            state.cart.forEach(i => msg += `▸ ${i.qty}x ${i.name}${i.variant ? ' (' + i.variant + ')' : ''} : ${i.price * i.qty}€\n`);
+            msg += `\n📦 Mode: ${modeLabel}`;
+            if (addr) msg += `\n📍 Adresse: ${addr}`;
+            msg += `\n💵 Paiement: Espèces (remise en main propre)`;
+            msg += `\n\n👤 ${state.userProfile.username} (ID: ${state.userProfile.id})`;
+            msg += `\n\n💰 *TOTAL : ${document.getElementById('cart-total-price').innerText}*`;
+            window.open(`https://t.me/OCAT312?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // ─── ADMIN ─────────────────────────────────────────────────────────────
+        function adminLoginPrompt() {
+            const p = prompt("Admin Password:");
+            if (p === "admin123") { state.isAdmin = true; localStorage.setItem('ocat_admin', 'true'); alert("🔓 Mode Admin Activé"); switchView('shop'); }
+        }
+        function logout() {
+            if (confirm("Déconnexion admin ?")) { localStorage.removeItem('ocat_admin'); state.isAdmin = false; switchView('landing'); }
+        }
+        function checkAdminUI() {
+            const c = document.getElementById('admin-controls'), b = document.getElementById('user-status-badge'), l = document.getElementById('logout-btn');
+            if (state.isAdmin) { c.classList.remove('hidden'); l.classList.remove('hidden'); b.innerText = "Mode Admin 🛠"; b.style.color = "#ff4444"; }
+            else { c.classList.add('hidden'); l.classList.add('hidden'); b.innerText = "Shop Officiel"; b.style.color = ""; }
+        }
+        function addNewProduct() {
+            PRODUCTS.unshift({
+                id: 'prod_' + Date.now(), name: "Nouveau Produit", category: state.category === 'all' ? 'Fleurs' : state.category,
+                desc: "Description du produit.", image: "📦", tag: "NEW", stats: { views: 0, likes: 0, sales: 0 },
+                variantsLivraison: [{ label: "5g", price: 50 }],
+                variantsMeetup: [{ label: "5g", price: 45 }]
+            });
+            renderProducts(); openEditModal(PRODUCTS[0].id);
+        }
+        function openEditModal(id) {
+            const p = PRODUCTS.find(x => x.id === id);
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-name').value = p.name;
+            const vl = p.variantsLivraison || p.variants;
+            const vm = p.variantsMeetup || p.variants;
+            document.getElementById('edit-price-liv').value = vl ? vl[0].price : (p.price || 0);
+            document.getElementById('edit-price-meet').value = vm ? vm[0].price : (p.price || 0);
+            document.getElementById('edit-tag').value = p.tag || '';
+            document.getElementById('edit-image').value = p.image || '📦';
+            document.getElementById('edit-desc').value = p.desc || '';
+            document.getElementById('edit-modal').classList.remove('hidden');
+        }
+        function saveProductEdit(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const p = PRODUCTS.find(x => x.id === id);
+            p.name = document.getElementById('edit-name').value;
+            const nl = parseFloat(document.getElementById('edit-price-liv').value);
+            const nm = parseFloat(document.getElementById('edit-price-meet').value);
+            if (p.variantsLivraison) p.variantsLivraison[0].price = nl;
+            else if (p.variants) p.variants[0].price = nl;
+            else p.price = nl;
+            if (p.variantsMeetup) p.variantsMeetup[0].price = nm;
+            p.tag = document.getElementById('edit-tag').value;
+            p.image = document.getElementById('edit-image').value;
+            p.desc = document.getElementById('edit-desc').value;
+            document.getElementById('edit-modal').classList.add('hidden');
+            renderProducts();
+        }
+        function exportMenuJson() {
+            const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(PRODUCTS, null, 2));
+            const n = document.createElement('a'); n.setAttribute("href", s); n.setAttribute("download", "menu.json");
+            document.body.appendChild(n); n.click(); n.remove();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>
