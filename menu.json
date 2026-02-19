@@ -2,52 +2,135 @@
   {
     "id": "prod_sf1000",
     "name": "SF1000🏎️",
-    "category": "Fleurs",
+    "category": "Résines",
     "desc": "90/120u — Variété premium haut de gamme, puissante et aromatique. Qualité irréprochable garantie.",
     "image": "🏎️",
     "tag": "TOP",
-    "stats": { "views": 0, "likes": 0, "sales": 0 },
+    "stats": {
+      "views": 0,
+      "likes": 0,
+      "sales": 0
+    },
     "variantsLivraison": [
-      { "label": "5g",   "price": 40  },
-      { "label": "10g",  "price": 70  },
-      { "label": "25g",  "price": 120 },
-      { "label": "50g",  "price": 170 },
-      { "label": "100g", "price": 320 }
+      {
+        "label": "5g",
+        "price": 40
+      },
+      {
+        "label": "10g",
+        "price": 70
+      },
+      {
+        "label": "25g",
+        "price": 120
+      },
+      {
+        "label": "50g",
+        "price": 170
+      },
+      {
+        "label": "100g",
+        "price": 320
+      }
     ],
     "variantsMeetup": [
-      { "label": "2g",   "price": 20  },
-      { "label": "5g",   "price": 30  },
-      { "label": "10g",  "price": 60  },
-      { "label": "25g",  "price": 110 },
-      { "label": "50g",  "price": 160 },
-      { "label": "100g", "price": 310 }
+      {
+        "label": "2g",
+        "price": 20
+      },
+      {
+        "label": "5g",
+        "price": 30
+      },
+      {
+        "label": "10g",
+        "price": 60
+      },
+      {
+        "label": "25g",
+        "price": 110
+      },
+      {
+        "label": "50g",
+        "price": 160
+      },
+      {
+        "label": "100g",
+        "price": 310
+      }
     ]
   },
   {
     "id": "prod_frozen_cali",
     "name": "🫒 Frozen Cali US 🇺🇸",
-    "category": "Fleurs",
+    "category": "Résines",
     "desc": "Importation directe USA. Terpènes exceptionnels, effet puissant et long. Qualité Cali top-shelf.",
     "image": "🫒",
     "tag": "US IMPORT",
-    "stats": { "views": 0, "likes": 0, "sales": 0 },
+    "stats": {
+      "views": 0,
+      "likes": 0,
+      "sales": 0
+    },
     "variantsLivraison": [
-      { "label": "1g",   "price": 30  },
-      { "label": "2g",   "price": 50  },
-      { "label": "5g",   "price": 80  },
-      { "label": "10g",  "price": 160 },
-      { "label": "20g",  "price": 280 },
-      { "label": "50g",  "price": 510 },
-      { "label": "100g", "price": 960 }
+      {
+        "label": "1g",
+        "price": 30
+      },
+      {
+        "label": "2g",
+        "price": 50
+      },
+      {
+        "label": "5g",
+        "price": 80
+      },
+      {
+        "label": "10g",
+        "price": 160
+      },
+      {
+        "label": "20g",
+        "price": 280
+      },
+      {
+        "label": "50g",
+        "price": 510
+      },
+      {
+        "label": "100g",
+        "price": 960
+      }
     ],
     "variantsMeetup": [
-      { "label": "1g",   "price": 20  },
-      { "label": "2g",   "price": 30  },
-      { "label": "5g",   "price": 70  },
-      { "label": "10g",  "price": 150 },
-      { "label": "20g",  "price": 270 },
-      { "label": "50g",  "price": 500 },
-      { "label": "100g", "price": 950 }
+      {
+        "label": "1g",
+        "price": 20
+      },
+      {
+        "label": "2g",
+        "price": 30
+      },
+      {
+        "label": "5g",
+        "price": 70
+      },
+      {
+        "label": "10g",
+        "price": 150
+      },
+      {
+        "label": "20g",
+        "price": 270
+      },
+      {
+        "label": "50g",
+        "price": 500
+      },
+      {
+        "label": "100g",
+        "price": 950
+      }
     ]
   },
   {
@@ -57,16 +140,38 @@
     "desc": "Nouveauté !",
     "image": "images/img1771253216.jpg",
     "tag": "NEW",
-    "stats": { "views": 0, "likes": 0, "sales": 0 },
+    "stats": {
+      "views": 0,
+      "likes": 0,
+      "sales": 0
+    },
     "variantsLivraison": [
-      { "label": "2g",  "price": 30 },
-      { "label": "5g",  "price": 50 },
-      { "label": "10g", "price": 70 }
+      {
+        "label": "2g",
+        "price": 30
+      },
+      {
+        "label": "5g",
+        "price": 50
+      },
+      {
+        "label": "10g",
+        "price": 70
+      }
     ],
     "variantsMeetup": [
-      { "label": "2g",  "price": 25 },
-      { "label": "5g",  "price": 45 },
-      { "label": "10g", "price": 65 }
+      {
+        "label": "2g",
+        "price": 25
+      },
+      {
+        "label": "5g",
+        "price": 45
+      },
+      {
+        "label": "10g",
+        "price": 65
+      }
     ]
   },
   {
@@ -76,12 +181,22 @@
     "desc": "Nouveauté !",
     "image": "images/img1771252270.jpg",
     "tag": "NEW",
-    "stats": { "views": 0, "likes": 0, "sales": 0 },
+    "stats": {
+      "views": 0,
+      "likes": 0,
+      "sales": 0
+    },
     "variantsLivraison": [
-      { "label": "5g",  "price": 100 }
+      {
+        "label": "5g",
+        "price": 100
+      }
     ],
     "variantsMeetup": [
-      { "label": "5g",  "price": 90 }
+      {
+        "label": "5g",
+        "price": 90
+      }
     ]
   },
   {
@@ -91,14 +206,30 @@
     "image": "🥦",
     "desc": "Cali Top Shelf. Puissant.",
     "tag": "PREMIUM",
-    "stats": { "views": 89, "likes": 32, "sales": 5 },
+    "stats": {
+      "views": 89,
+      "likes": 32,
+      "sales": 5
+    },
     "variantsLivraison": [
-      { "label": "5g",  "price": 65 },
-      { "label": "10g", "price": 95 }
+      {
+        "label": "5g",
+        "price": 65
+      },
+      {
+        "label": "10g",
+        "price": 95
+      }
     ],
     "variantsMeetup": [
-      { "label": "5g",  "price": 55 },
-      { "label": "10g", "price": 85 }
+      {
+        "label": "5g",
+        "price": 55
+      },
+      {
+        "label": "10g",
+        "price": 85
+      }
     ]
   }
 ]
