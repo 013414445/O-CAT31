@@ -712,6 +712,26 @@
         </div>
     </div>
 
+    <!-- TELEGRAM VIDEO FULLSCREEN MODAL -->
+    <div id="tg-video-overlay"
+        class="fixed inset-0 bg-black z-[100] hidden flex-col items-center justify-center fade-in">
+        <button onclick="closeTelegramVideo()"
+            class="absolute top-6 right-6 z-[110] bg-black/60 p-3 rounded-full text-white border border-[#333] hover:bg-[#222]">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        <div class="w-full h-full max-w-lg relative overflow-hidden flex items-center justify-center">
+            <!-- Loading indicator behind iframe -->
+            <div class="absolute inset-0 flex items-center justify-center z-[-1]">
+                <div class="w-8 h-8 border-4 border-t-[#39ff14] border-transparent rounded-full animate-spin"></div>
+            </div>
+            <iframe id="tg-video-frame" src="about:blank" class="w-full h-full"
+                style="border:none; min-height:120%; margin-top:-10%;" scrolling="no" frameborder="0"
+                allowTransparency="true" allowfullscreen allow="encrypted-media; fullscreen;"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-fullscreen"></iframe>
+        </div>
+        <p class="absolute bottom-6 text-[#666] text-xs z-[110]">Lecteur vidéo sécurisé</p>
+    </div>
+
     <script>
         // URL optionnelle pour mise à jour distante (remplacer par votre propre repo si besoin)
         const MENU_URL = "menu.json";
@@ -864,21 +884,31 @@
             if (!src) return `<span class="text-4xl">📦</span>`;
 
             if (src.includes('t.me/')) {
-                // Pour Telegram, l'URL iframe d'embed standard coupe la conversation
                 let embedUrl = src;
                 if (!embedUrl.includes('embed=1')) {
                     embedUrl += embedUrl.includes('?') ? '&embed=1' : '?embed=1';
                 }
 
-                // On cache la carte produit globale en iframe pour isoler la vidéo
-                // On utilise pointer-events:none dans la grille pour éviter de cliquer dedans
-                const pointer = enableFullscreen ? 'auto' : 'none';
+                // Pour éviter tout bug d'affichage (iframe coupée sur PC) ou de redirection (iPhone),
+                // on n'utilise PLUS d'iframe directement dans les cartes.
+                // On affiche une fausse vignette générique avec un gros bouton Play.
 
-                // Si on active le pointeur (vue détail), on permet d'utiliser les contrôles play/fullscreen de l'iframe Telegram
-                // On ajoute un sandbox stricte pour empêcher frame-busting (redirection forcée) sur l'iPhone quand on clique sur la carte !
-                return `<div class="w-full ${hClass} ${rClass} overflow-hidden relative flex justify-center items-center" style="background:#000;">
-                    <iframe src="${embedUrl}" class="w-full h-full" style="border:none; pointer-events:${pointer}; min-height:120%; margin-top:-10%;" scrolling="no" frameborder="0" allowTransparency="true" allowfullscreen allow="encrypted-media; fullscreen;" sandbox="allow-scripts allow-same-origin allow-popups allow-fullscreen"></iframe>
-                    ${enableFullscreen ? '' : `<div class="absolute inset-0 bg-transparent z-10 w-full h-full"></div>`}
+                if (!enableFullscreen) {
+                    // Carte Shop (Grille) : Vignette statique non cliquable (le clic ouvre le produit)
+                    return `<div class="w-full ${hClass} ${rClass} flex flex-col items-center justify-center relative overflow-hidden" style="background: linear-gradient(135deg, #111, #000);">
+                        <i data-lucide="video" class="w-10 h-10 text-[#444] mb-2"></i>
+                        <div class="absolute inset-0 bg-black/20"></div>
+                        <div class="absolute z-10 text-white bg-black/60 p-2 rounded-full backdrop-blur-md"><i data-lucide="play" class="w-5 h-5 fill-current"></i></div>
+                    </div>`;
+                }
+
+                // Page Produit (Détail) : Bouton qui lance le mode "Plein Écran Web" (div absolute)
+                return `<div class="w-full ${hClass} ${rClass} flex flex-col items-center justify-center relative shadow-inner shadow-black/80" style="background: linear-gradient(135deg, #111, #000);">
+                    <i data-lucide="video" class="w-16 h-16 text-[#333] mb-4"></i>
+                    <button onclick="event.stopPropagation(); openTelegamFullscreen('${embedUrl}')" class="z-20 neon-btn px-6 py-3.5 rounded-full flex items-center gap-2 shadow-lg" style="box-shadow:0 0 25px rgba(57,255,20,0.3)">
+                        <i data-lucide="play-circle" class="w-6 h-6"></i> Regarder la vidéo
+                    </button>
+                    <p class="text-[10px] text-[#666] mt-3">Lecteur plein écran isolé</p>
                 </div>`;
             }
 
@@ -904,6 +934,25 @@
             else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
             else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
         }
+
+        // ─── TELEGRAM FULLSCREEN OVERLAY ───────────────────────────────────────
+        window.openTelegamFullscreen = function (url) {
+            const overlay = document.getElementById('tg-video-overlay');
+            const frame = document.getElementById('tg-video-frame');
+            frame.src = url;
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // block scrolling
+        };
+
+        window.closeTelegramVideo = function () {
+            const overlay = document.getElementById('tg-video-overlay');
+            const frame = document.getElementById('tg-video-frame');
+            overlay.classList.remove('flex');
+            overlay.classList.add('hidden');
+            frame.src = 'about:blank'; // stop playback
+            document.body.style.overflow = '';
+        };
 
         // ─── NAVIGATION ────────────────────────────────────────────────────────
         function switchView(id) {
