@@ -348,6 +348,16 @@
             opacity: 0.45;
             pointer-events: none;
         }
+
+        /* ── Swipe handle ── */
+        .swipe-handle {
+            width: 40px;
+            height: 5px;
+            border-radius: 99px;
+            background: #444;
+            margin: 10px auto 4px;
+            cursor: grab;
+        }
     </style>
 </head>
 
@@ -555,6 +565,7 @@
     <div id="product-detail-modal"
         class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl shadow-2xl modal-base modal-closed h-[88vh] flex flex-col border-t border-[#222]"
         style="background:var(--bg)">
+        <div id="detail-swipe-handle" class="swipe-handle"></div>
         <div id="detail-content" class="flex-1 overflow-y-auto p-0 relative"></div>
     </div>
 
@@ -564,6 +575,7 @@
     <div id="cart-modal"
         class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl shadow-2xl modal-base modal-closed invisible h-[92vh] flex flex-col border-t border-[#222]"
         style="background:var(--bg)">
+        <div id="cart-swipe-handle" class="swipe-handle"></div>
         <div class="p-4 border-b border-[#1e1e1e] flex items-center justify-between rounded-t-2xl"
             style="background:var(--surface)">
             <h2 class="text-xl font-black flex items-center gap-2"><i data-lucide="shopping-cart" class="w-5 h-5"
@@ -629,6 +641,41 @@
                 style="box-shadow:0 0 20px rgba(57,255,20,0.3)">
                 <i data-lucide="send" class="w-5 h-5"></i> Commander sur Telegram
             </button>
+        </div>
+    </div>
+
+    <!-- CONFIRM ORDER MODAL -->
+    <div id="confirm-overlay" class="fixed inset-0 bg-black/80 z-[60] hidden backdrop-blur-sm"
+        onclick="closeConfirmModal()"></div>
+    <div id="confirm-modal"
+        class="fixed inset-x-0 bottom-0 z-[70] hidden rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto border-t border-[#222]"
+        style="background:var(--bg)">
+        <div class="p-5 space-y-4">
+            <h2 class="text-xl font-black text-white flex items-center gap-2"><i data-lucide="clipboard-check"
+                    class="w-5 h-5" style="color:var(--neon)"></i> Récapitulatif</h2>
+            <div id="confirm-items" class="space-y-1"></div>
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between"><span class="text-[#888]">Mode</span><span
+                        class="text-white font-bold" id="confirm-mode"></span></div>
+                <div id="confirm-addr-row" class="flex justify-between hidden"><span
+                        class="text-[#888]">Adresse</span><span class="text-white font-bold" id="confirm-addr"></span>
+                </div>
+                <div class="flex justify-between"><span class="text-[#888]">Paiement</span><span
+                        class="text-white font-bold">💶 Espèces</span></div>
+            </div>
+            <div class="flex justify-between items-end pt-2 border-t border-[#222]">
+                <span class="text-sm text-[#888]">Total</span>
+                <span class="text-2xl font-black" style="color:var(--neon)" id="confirm-total">0€</span>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeConfirmModal()"
+                    class="flex-1 py-3.5 rounded-xl text-sm font-bold text-white border border-[#333]"
+                    style="background:var(--surface2)">Modifier</button>
+                <button onclick="sendOrder()"
+                    class="flex-1 neon-btn py-3.5 rounded-xl text-sm flex items-center justify-center gap-2"
+                    style="box-shadow:0 0 18px rgba(57,255,20,0.3)"><i data-lucide="send" class="w-4 h-4"></i>
+                    Confirmer</button>
+            </div>
         </div>
     </div>
 
@@ -961,9 +1008,9 @@
 
             let vHtml = '';
             if (vars) {
-                const opts = vars.map((v, i) => `<option value="${i}"> ${v.label} — ${v.price}€</option>).join('');
-                vHtml = `<div class="mt-3" ><label class="text-xs text-[#888] font-bold uppercase">Quantité</label>
-                    <select id="variant-select" onchange="updateDetailPrice(this.value)" class="ocat-input mt-1">${opts}</select></div> `;
+                const opts = vars.map((v, i) => `<option value="${i}">${v.label} — ${v.price}€</option>`).join('');
+                vHtml = `<div class="mt-3"><label class="text-xs text-[#888] font-bold uppercase">Quantité</label>
+                    <select id="variant-select" onchange="updateDetailPrice(this.value)" class="ocat-input mt-1">${opts}</select></div>`;
             }
 
             c.innerHTML = `
@@ -1023,7 +1070,7 @@
             // Update variant select
             const sel = document.getElementById('variant-select');
             if (sel && vars) {
-                sel.innerHTML = vars.map((v, i) => `<option value="${i}"> ${v.label} — ${v.price}€</option>).join('');
+                sel.innerHTML = vars.map((v, i) => `<option value="${i}">${v.label} — ${v.price}€</option>`).join('');
                 sel.value = "0";
                 state.selectedVariantIndex = 0;
             }
@@ -1130,7 +1177,7 @@
                             <span class="text-xs font-black w-4 text-center">${i.qty}</span>
                             <button onclick="updateQty('${i.uniqueId}', 1)" class="p-1" style="color:var(--neon)"><i data-lucide="plus" class="w-3 h-3"></i></button>
                         </div>
-                    </div> `).join('');
+                    </div>`).join('');
                 updateTotal();
                 syncCartToggle();
             }
