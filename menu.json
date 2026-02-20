@@ -6,6 +6,7 @@
     "desc": "90/120u — Variété premium haut de gamme, puissante et aromatique. Qualité irréprochable garantie.",
     "image": "🏎️",
     "tag": "TOP",
+    "stock": 7,
     "stats": {
       "views": 0,
       "likes": 0,
@@ -67,6 +68,7 @@
     "desc": "Importation directe USA. Terpènes exceptionnels, effet puissant et long. Qualité Cali top-shelf.",
     "image": "🫒",
     "tag": "US IMPORT",
+    "stock": 2,
     "stats": {
       "views": 0,
       "likes": 0,
@@ -206,6 +208,7 @@
     "image": "🥦",
     "desc": "Cali Top Shelf. Puissant.",
     "tag": "PREMIUM",
+    "stock": 12,
     "stats": {
       "views": 89,
       "likes": 32,
