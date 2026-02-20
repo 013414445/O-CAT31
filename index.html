@@ -397,8 +397,24 @@
 
             <!-- Liens utiles -->
             <section class="text-center pt-4 pb-4 border-t border-[#1a1a1a] px-1">
-                <p class="text-sm text-[#555] mb-4">Besoin d'aide ou questions ?</p>
+                <p class="text-sm text-[#555] mb-4">Rejoignez-nous &amp; contactez-nous</p>
                 <div class="flex flex-col gap-3 max-w-sm mx-auto">
+                    <!-- Bouton Canal Telegram -->
+                    <a href="https://t.me/+bFpGFT5HLzoyZGM0" target="_blank"
+                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
+                        style="background:var(--surface)">
+                        <i data-lucide="send" class="w-5 h-5" style="color:var(--neon)"></i> Rejoindre le Canal Telegram
+                    </a>
+
+                    <!-- Bouton Canal Luffa (vide pour le moment) -->
+                    <button disabled
+                        class="w-full flex items-center justify-center gap-3 border border-[#222] text-[#444] font-bold py-3.5 rounded-2xl cursor-not-allowed"
+                        style="background:var(--surface)">
+                        <i data-lucide="gem" class="w-5 h-5 text-[#333]"></i> Rejoindre le Canal Luffa
+                        <span class="text-[10px] text-[#333] font-normal ml-1">(bientôt)</span>
+                    </button>
+
+                    <!-- Bouton Gérant -->
                     <a href="https://t.me/OCAT312" target="_blank"
                         class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
                         style="background:var(--surface)">
@@ -650,8 +666,7 @@
         const CATEGORIES = [
             { id: "all", name: "Tout", icon: "grid" },
             { id: "Fleurs", name: "🌿 Fleurs", icon: "leaf" },
-            { id: "Résines", name: "🍫 Résines", icon: "droplets" },
-            { id: "Comestibles", name: "🍬 Comestibles", icon: "cookie" }
+            { id: "Résines", name: "🍫 Résines", icon: "droplets" }
         ];
 
         // delivery mode: 'livraison' or 'meetup'
@@ -811,7 +826,7 @@
                 (state.category === 'all' || p.category === state.category) &&
                 p.name.toLowerCase().includes(state.search)
             );
-            if (f.length === 0) { c.innerHTML = `<div class="text-center py-14 space-y-3"><p class="text-[#444] text-sm font-bold">Aucun produit trouvé.</p><p class="text-[#333] text-xs">Produits à venir — restez connectés 🔌</p><p class="text-[#262626] text-[10px] italic">Rejoignez le canal <span style="color:var(--neon)">@OCAT312</span> pour les annonces.</p></div>`; return; }
+            if (f.length === 0) { c.innerHTML = `<div class="text-center py-14 space-y-3"><p class="text-[#444] text-sm font-bold">Aucun produit trouvé.</p><p class="text-[#333] text-xs">Produits à venir — restez connectés 🔌</p><p class="text-[#262626] text-[10px] italic">Rejoignez le canal <a href="https://t.me/+bFpGFT5HLzoyZGM0" target="_blank" style="color:var(--neon);text-decoration:underline">@OCAT312</a> pour les annonces.</p></div>`; return; }
             c.innerHTML = f.map(p => {
                 const vars = getVariants(p, deliveryMode);
                 const price = vars ? vars[0].price : (p.price || 0);
@@ -1044,14 +1059,30 @@
             if (!document.getElementById('kyc-check').checked) { alert("⚠️ Veuillez confirmer les conditions."); return; }
             state.userProfile.orderCount++;
             localStorage.setItem('ocat_order_count', state.userProfile.orderCount);
-            const modeLabel = deliveryMode === 'meetup' ? '📍 Meet-up (lieu à convenir)' : '🚗 Livraison';
-            let msg = "🔥 *COMMANDE O'CAT 31* 🔥\n\n";
-            state.cart.forEach(i => msg += `▸ ${i.qty}x ${i.name}${i.variant ? ' (' + i.variant + ')' : ''} : ${i.price * i.qty}€\n`);
-            msg += `\n📦 Mode: ${modeLabel}`;
-            if (addr) msg += `\n📍 Adresse: ${addr}`;
-            msg += `\n💵 Paiement: Espèces (remise en main propre)`;
-            msg += `\n\n👤 ${state.userProfile.username} (ID: ${state.userProfile.id})`;
-            msg += `\n\n💰 *TOTAL : ${document.getElementById('cart-total-price').innerText}*`;
+
+            const modeLabel = deliveryMode === 'meetup' ? '📍 Meet-up (lieu à convenir)' : '🚗 Livraison à domicile';
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+            let msg = "🔥 NOUVELLE COMMANDE — O'CAT 31 🔥\n";
+            msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `📅 ${dateStr}\n`;
+            msg += `👤 Client : ${state.userProfile.username} (ID: ${state.userProfile.id})\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
+            msg += `🛒 ARTICLES :\n`;
+            state.cart.forEach(i => {
+                msg += `  ▸ ${i.qty}x ${i.name}`;
+                if (i.variant) msg += ` [${i.variant}]`;
+                msg += ` → ${i.price * i.qty}€\n`;
+            });
+            msg += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `📦 Mode de remise : ${modeLabel}\n`;
+            if (addr) msg += `📍 Adresse : ${addr}\n`;
+            msg += `💵 Paiement : Espèces (remise en main propre)\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `💰 TOTAL : ${document.getElementById('cart-total-price').innerText}\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━━`;
+
             window.open(`https://t.me/OCAT312?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
