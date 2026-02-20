@@ -713,24 +713,7 @@
     </div>
 
     <!-- TELEGRAM VIDEO FULLSCREEN MODAL -->
-    <div id="tg-video-overlay"
-        class="fixed inset-0 bg-black z-[100] hidden flex-col items-center justify-center fade-in">
-        <button onclick="closeTelegramVideo()"
-            class="absolute top-6 right-6 z-[110] bg-black/60 p-3 rounded-full text-white border border-[#333] hover:bg-[#222]">
-            <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
-        <div class="w-full h-full max-w-lg relative overflow-hidden flex items-center justify-center">
-            <!-- Loading indicator behind iframe -->
-            <div class="absolute inset-0 flex items-center justify-center z-[-1]">
-                <div class="w-8 h-8 border-4 border-t-[#39ff14] border-transparent rounded-full animate-spin"></div>
-            </div>
-            <iframe id="tg-video-frame" src="about:blank" class="w-full h-full"
-                style="border:none; min-height:120%; margin-top:-10%;" scrolling="no" frameborder="0"
-                allowTransparency="true" allowfullscreen allow="encrypted-media; fullscreen;"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-fullscreen"></iframe>
-        </div>
-        <p class="absolute bottom-6 text-[#666] text-xs z-[110]">Lecteur vidéo sécurisé</p>
-    </div>
+    <!-- Removed: Native HTML5 video is now used instead -->
 
     <script>
         // URL optionnelle pour mise à jour distante (remplacer par votre propre repo si besoin)
@@ -883,47 +866,35 @@
         function getMediaHtml(src, hClass = "h-32", rClass = "rounded-xl", enableFullscreen = false) {
             if (!src) return `<span class="text-4xl">📦</span>`;
 
-            if (src.includes('t.me/')) {
-                let embedUrl = src;
-                if (!embedUrl.includes('embed=1')) {
-                    embedUrl += embedUrl.includes('?') ? '&embed=1' : '?embed=1';
-                }
-
-                // Pour éviter tout bug d'affichage (iframe coupée sur PC) ou de redirection (iPhone),
-                // on n'utilise PLUS d'iframe directement dans les cartes.
-                // On affiche une fausse vignette générique avec un gros bouton Play.
-
-                if (!enableFullscreen) {
-                    // Carte Shop (Grille) : Vignette statique non cliquable (le clic ouvre le produit)
-                    return `<div class="w-full ${hClass} ${rClass} flex flex-col items-center justify-center relative overflow-hidden" style="background: linear-gradient(135deg, #111, #000);">
-                        <i data-lucide="video" class="w-10 h-10 text-[#444] mb-2"></i>
-                        <div class="absolute inset-0 bg-black/20"></div>
-                        <div class="absolute z-10 text-white bg-black/60 p-2 rounded-full backdrop-blur-md"><i data-lucide="play" class="w-5 h-5 fill-current"></i></div>
-                    </div>`;
-                }
-
-                // Page Produit (Détail) : Bouton qui lance le mode "Plein Écran Web" (div absolute)
-                return `<div class="w-full ${hClass} ${rClass} flex flex-col items-center justify-center relative shadow-inner shadow-black/80" style="background: linear-gradient(135deg, #111, #000);">
-                    <i data-lucide="video" class="w-16 h-16 text-[#333] mb-4"></i>
-                    <button onclick="event.stopPropagation(); openTelegamFullscreen('${embedUrl}')" class="z-20 neon-btn px-6 py-3.5 rounded-full flex items-center gap-2 shadow-lg" style="box-shadow:0 0 25px rgba(57,255,20,0.3)">
-                        <i data-lucide="play-circle" class="w-6 h-6"></i> Regarder la vidéo
-                    </button>
-                    <p class="text-[10px] text-[#666] mt-3">Lecteur plein écran isolé</p>
-                </div>`;
-            }
-
-            // Detect video: extension OR Telegram/Luffa video URLs
+            // Detect video: extension (mp4, mov, webm) OR direct keyword
             const isVid = /\.(mp4|mov|webm)(\?.*)?$/i.test(src) || /video/i.test(src);
             const isUrl = src.startsWith('http') || src.startsWith('/') || src.startsWith('images/');
             const isEmoji = !isUrl && src.length <= 4;
 
             if (isEmoji) return `<span class="drop-shadow-lg text-6xl">${src}</span>`;
 
+            // Lien Telegram (t.me)
+            // L'intégration iframe de Telegram est très problématique sur iPhone (redirections, frame-busting).
+            // Si l'admin s'obstine à mettre un lien t.me/, on l'affiche simplement comme une vignette externe cliquable.
+            if (src.includes('t.me/')) {
+                return `<div class="w-full ${hClass} ${rClass} flex flex-col items-center justify-center relative p-4 text-center border border-[#333]" style="background: linear-gradient(135deg, #111, #000);">
+                    <i data-lucide="external-link" class="w-8 h-8 text-blue-400 mb-2"></i>
+                    <p class="text-[10px] text-[#aaa] font-bold">Vidéo Canal Telegram</p>
+                    ${enableFullscreen ? `<a href="${src}" target="_blank" class="mt-3 text-[10px] bg-blue-600/30 text-blue-400 px-4 py-2 rounded-full border border-blue-500/50">Ouvrir dans Telegram</a>` : ''}
+                </div>`;
+            }
+
+            // Pour l'iPhone (iOS), l'utilisation stricte de la balise HTML5 <video> avec playsinline 
+            // permet au lecteur natif Apple plein écran de prendre le relais parfaitement sur les liens mp4/mov !
             if (isVid) {
                 const vidId = "vid-" + Math.random().toString(36).substr(2, 9);
                 const fsBtn = enableFullscreen ? `<button onclick="event.stopPropagation(); toggleFullscreen('${vidId}')" class="fs-btn"><i data-lucide="maximize" class="w-4 h-4"></i></button>` : '';
-                return `<div class="video-wrapper"><video id="${vidId}" src="${src}" class="${hClass} ${rClass}" autoplay loop muted playsinline></video>${fsBtn}</div>`;
+                return `<div class="video-wrapper bg-black flex items-center justify-center">
+                    <video id="${vidId}" src="${src}" class="${hClass} ${rClass} w-full object-cover" autoplay loop muted playsinline preload="auto"></video>
+                    ${fsBtn}
+                </div>`;
             }
+            // Si ce n'est pas une vidéo (image classique)
             return `<img src="${src}" class="w-full ${hClass} object-cover ${rClass}" alt="Produit" loading="lazy">`;
         }
 
@@ -934,25 +905,6 @@
             else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
             else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
         }
-
-        // ─── TELEGRAM FULLSCREEN OVERLAY ───────────────────────────────────────
-        window.openTelegamFullscreen = function (url) {
-            const overlay = document.getElementById('tg-video-overlay');
-            const frame = document.getElementById('tg-video-frame');
-            frame.src = url;
-            overlay.classList.remove('hidden');
-            overlay.classList.add('flex');
-            document.body.style.overflow = 'hidden'; // block scrolling
-        };
-
-        window.closeTelegramVideo = function () {
-            const overlay = document.getElementById('tg-video-overlay');
-            const frame = document.getElementById('tg-video-frame');
-            overlay.classList.remove('flex');
-            overlay.classList.add('hidden');
-            frame.src = 'about:blank'; // stop playback
-            document.body.style.overflow = '';
-        };
 
         // ─── NAVIGATION ────────────────────────────────────────────────────────
         function switchView(id) {
