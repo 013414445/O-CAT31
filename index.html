@@ -864,13 +864,21 @@
             if (!src) return `<span class="text-4xl">📦</span>`;
 
             if (src.includes('t.me/')) {
+                // Pour Telegram, l'URL iframe d'embed standard coupe la conversation
                 let embedUrl = src;
                 if (!embedUrl.includes('embed=1')) {
                     embedUrl += embedUrl.includes('?') ? '&embed=1' : '?embed=1';
                 }
+
+                // On cache la carte produit globale en iframe pour isoler la vidéo
+                // On utilise pointer-events:none dans la grille pour éviter de cliquer dedans
                 const pointer = enableFullscreen ? 'auto' : 'none';
-                return `<div class="w-full ${hClass} ${rClass} overflow-hidden relative" style="background:#0d0d0d;">
-                    <iframe src="${embedUrl}" class="absolute top-0 left-0 w-full h-full" style="border:none; pointer-events:${pointer};" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+
+                // Si on active le pointeur (vue détail), on permet d'utiliser les contrôles play/fullscreen de l'iframe Telegram
+                // On ajoute un sandbox stricte pour empêcher frame-busting (redirection forcée) sur l'iPhone quand on clique sur la carte !
+                return `<div class="w-full ${hClass} ${rClass} overflow-hidden relative flex justify-center items-center" style="background:#000;">
+                    <iframe src="${embedUrl}" class="w-full h-full" style="border:none; pointer-events:${pointer}; min-height:120%; margin-top:-10%;" scrolling="no" frameborder="0" allowTransparency="true" allowfullscreen allow="encrypted-media; fullscreen;" sandbox="allow-scripts allow-same-origin allow-popups allow-fullscreen"></iframe>
+                    ${enableFullscreen ? '' : `<div class="absolute inset-0 bg-transparent z-10 w-full h-full"></div>`}
                 </div>`;
             }
 
