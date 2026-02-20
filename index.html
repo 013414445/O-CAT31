@@ -862,6 +862,18 @@
         // ─── MEDIA ─────────────────────────────────────────────────────────────
         function getMediaHtml(src, hClass = "h-32", rClass = "rounded-xl", enableFullscreen = false) {
             if (!src) return `<span class="text-4xl">📦</span>`;
+
+            if (src.includes('t.me/')) {
+                let embedUrl = src;
+                if (!embedUrl.includes('embed=1')) {
+                    embedUrl += embedUrl.includes('?') ? '&embed=1' : '?embed=1';
+                }
+                const pointer = enableFullscreen ? 'auto' : 'none';
+                return `<div class="w-full ${hClass} ${rClass} overflow-hidden relative" style="background:#0d0d0d;">
+                    <iframe src="${embedUrl}" class="absolute top-0 left-0 w-full h-full" style="border:none; pointer-events:${pointer};" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+                </div>`;
+            }
+
             // Detect video: extension OR Telegram/Luffa video URLs
             const isVid = /\.(mp4|mov|webm)(\?.*)?$/i.test(src) || /video/i.test(src);
             const isUrl = src.startsWith('http') || src.startsWith('/') || src.startsWith('images/');
