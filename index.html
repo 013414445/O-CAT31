@@ -945,7 +945,7 @@
         function setCategory(id) { state.category = id; renderCategories(); renderProducts(); }
         function renderCategories() {
             document.getElementById('category-container').innerHTML = CATEGORIES.map(c =>
-                `< button onclick = "setCategory('${c.id}')" class="cat-pill ${state.category === c.id ? 'active' : ''}" > ${c.name}</button > `
+                `<button onclick="setCategory('${c.id}')" class="cat-pill ${state.category === c.id ? 'active' : ''}">${c.name}</button>`
             ).join('');
         }
 
@@ -961,16 +961,16 @@
 
             let vHtml = '';
             if (vars) {
-                const opts = vars.map((v, i) => `< option value = "${i}" > ${v.label} — ${v.price}€</option > `).join('');
-                vHtml = `< div class="mt-3" ><label class="text-xs text-[#888] font-bold uppercase">Quantité</label>
-                    <select id="variant-select" onchange="updateDetailPrice(this.value)" class="ocat-input mt-1">${opts}</select></div > `;
+                const opts = vars.map((v, i) => `<option value="${i}"> ${v.label} — ${v.price}€</option>).join('');
+                vHtml = `<div class="mt-3" ><label class="text-xs text-[#888] font-bold uppercase">Quantité</label>
+                    <select id="variant-select" onchange="updateDetailPrice(this.value)" class="ocat-input mt-1">${opts}</select></div> `;
             }
 
             c.innerHTML = `
-                    < div class="relative h-72 flex items-center justify-center overflow-hidden group" style = "background:#0a0a0a" >
+                    <div class="relative h-72 flex items-center justify-center overflow-hidden group" style="background:#0a0a0a" >
                         ${media}
                 <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/60 p-2 rounded-full text-white z-20 border border-[#333]"><i data-lucide="x" class="w-6 h-6"></i></button>
-                </div >
+                </div>
                     <div class="p-5 pb-24 space-y-4">
                         <div class="flex justify-between items-start">
                             <div>
@@ -1023,7 +1023,7 @@
             // Update variant select
             const sel = document.getElementById('variant-select');
             if (sel && vars) {
-                sel.innerHTML = vars.map((v, i) => `< option value = "${i}" > ${v.label} — ${v.price}€</option > `).join('');
+                sel.innerHTML = vars.map((v, i) => `<option value="${i}"> ${v.label} — ${v.price}€</option>).join('');
                 sel.value = "0";
                 state.selectedVariantIndex = 0;
             }
@@ -1119,8 +1119,7 @@
                 con.innerHTML = ''; emp.classList.remove('hidden'); frm.classList.add('hidden'); ftr.classList.add('hidden');
             } else {
                 emp.classList.add('hidden'); frm.classList.remove('hidden'); ftr.classList.remove('hidden');
-                con.innerHTML = state.cart.map(i => `
-                    < div class="flex items-center gap-3 p-3 rounded-xl border border-[#222]" style = "background:var(--surface)" >
+                con.innerHTML = state.cart.map(i => `<div class="flex items-center gap-3 p-3 rounded-xl border border-[#222]" style="background:var(--surface)" >
                         <div class="h-12 w-12 rounded-lg flex items-center justify-center overflow-hidden shrink-0" style="background:#0d0d0d">${getMediaHtml(i.image, "h-full", "rounded-md")}</div>
                         <div class="flex-1">
                             <h4 class="font-bold text-white text-sm">${i.name}</h4>
@@ -1131,7 +1130,7 @@
                             <span class="text-xs font-black w-4 text-center">${i.qty}</span>
                             <button onclick="updateQty('${i.uniqueId}', 1)" class="p-1" style="color:var(--neon)"><i data-lucide="plus" class="w-3 h-3"></i></button>
                         </div>
-                    </div > `).join('');
+                    </div> `).join('');
                 updateTotal();
                 syncCartToggle();
             }
