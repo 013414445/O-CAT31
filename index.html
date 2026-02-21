@@ -1324,65 +1324,14 @@
             document.body.appendChild(n); n.click(); n.remove();
         }
 
-        // ─── SWIPE TO CLOSE ────────────────────────────────────────────────────
+        // ─── SWIPE TO CLOSE (Désactivé pour éviter les conflits Telegram) ──────
         function initSwipe(modalId, closeCallback) {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
-            let startY = 0, currentY = 0, dragging = false;
-            const THRESHOLD = 80;
-
-            function onStart(e) {
-                // Ignore si on est en train de scroller le contenu interne (pas tout en haut)
-                const scrollable = e.target.closest('.overflow-y-auto');
-                if (scrollable && scrollable.scrollTop > 5) return;
-
-                const t = e.touches ? e.touches[0] : e;
-                startY = t.clientY;
-                dragging = true;
-                modal.style.transition = 'none';
-            }
-            function onMove(e) {
-                if (!dragging) return;
-                const t = e.touches ? e.touches[0] : e;
-                // On ne permet de glisser que vers le bas
-                currentY = Math.max(0, t.clientY - startY);
-                if (currentY > 0) {
-                    modal.style.transform = `translateY(${currentY}px)`;
-                    modal.style.opacity = String(Math.max(0.4, 1 - currentY / 400));
-                }
-            }
-            function onEnd() {
-                if (!dragging) return;
-                dragging = false;
-                modal.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s';
-                if (currentY > THRESHOLD) {
-                    modal.style.transform = 'translateY(110%)';
-                    modal.style.opacity = '0';
-                    setTimeout(() => {
-                        modal.style.transform = '';
-                        modal.style.opacity = '';
-                        closeCallback();
-                    }, 280);
-                } else {
-                    modal.style.transform = 'translateY(0)';
-                    modal.style.opacity = '1';
-                }
-                currentY = 0;
-            }
-
-            // Bind sur tout le modal pour plus grande fluidité
-            modal.addEventListener('touchstart', onStart, { passive: true });
-            document.addEventListener('touchmove', onMove, { passive: true });
-            document.addEventListener('touchend', onEnd);
-            // Mouse pour debug desktop
-            modal.addEventListener('mousedown', onStart);
-            document.addEventListener('mousemove', onMove);
-            document.addEventListener('mouseup', onEnd);
+            // Logique de swipe désactivée. 
+            // Telegram gère déjà le swipe vers le bas pour fermer la WebApp entière.
         }
 
         function initAllSwipes() {
-            initSwipe('cart-modal', () => toggleCart(false));
-            initSwipe('product-detail-modal', () => closeProductDetail());
+            // Plus de swipe custom pour éviter de bugger la croix de fermeture.
         }
 
         window.onload = () => { init(); initAllSwipes(); };
