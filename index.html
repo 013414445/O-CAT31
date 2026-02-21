@@ -651,8 +651,13 @@
         class="fixed inset-x-0 bottom-0 z-[70] hidden rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto border-t border-[#222]"
         style="background:var(--bg)">
         <div class="p-5 space-y-4">
-            <h2 class="text-xl font-black text-white flex items-center gap-2"><i data-lucide="clipboard-check"
-                    class="w-5 h-5" style="color:var(--neon)"></i> Récapitulatif</h2>
+            <h2 class="text-xl font-black text-white flex items-center justify-between">
+                <span class="flex items-center gap-2"><i data-lucide="clipboard-check" class="w-5 h-5"
+                        style="color:var(--neon)"></i> Récapitulatif</span>
+                <button onclick="copyOrderText()"
+                    class="text-xs bg-[#222] hover:bg-[#333] px-3 py-1.5 rounded-full flex items-center gap-1 text-white transition-colors cursor-pointer active:scale-95"><i
+                        data-lucide="copy" class="w-3 h-3"></i> Copier</button>
+            </h2>
             <div id="confirm-items" class="space-y-1"></div>
             <div class="space-y-2 text-sm">
                 <div class="flex justify-between"><span class="text-[#888]">Mode</span><span
@@ -720,76 +725,7 @@
         const MENU_URL = "menu.json";
 
         // ─── CATALOGUE INLINE (toujours disponible, même sans réseau) ──────────
-        let PRODUCTS = [
-            {
-                id: "prod_sf1000",
-                name: "SF1000\uD83C\uDFCE\uFE0F",
-                category: "Résines",
-                desc: "90/120u — Variété premium haut de gamme, puissante et aromatique. Qualité irréprochable garantie.",
-                image: "\uD83C\uDFCE\uFE0F",
-                tag: "TOP",
-                stats: { views: 0, likes: 0, sales: 0 },
-                variantsLivraison: [
-                    { label: "5g", price: 40 },
-                    { label: "10g", price: 70 },
-                    { label: "25g", price: 120 },
-                    { label: "50g", price: 170 },
-                    { label: "100g", price: 320 }
-                ],
-                variantsMeetup: [
-                    { label: "2g", price: 20 },
-                    { label: "5g", price: 30 },
-                    { label: "10g", price: 60 },
-                    { label: "25g", price: 110 },
-                    { label: "50g", price: 160 },
-                    { label: "100g", price: 310 }
-                ]
-            },
-            {
-                id: "prod_frozen_cali",
-                name: "\uD83AB2 Frozen Cali US \uD83C\uDDFA\uD83C\uDDF8",
-                category: "Résines",
-                desc: "Importation directe USA. Terpènes exceptionnels, effet puissant et long. Qualité Cali top-shelf.",
-                image: "\uD83AB2",
-                tag: "US IMPORT",
-                stats: { views: 0, likes: 0, sales: 0 },
-                variantsLivraison: [
-                    { label: "1g", price: 30 },
-                    { label: "2g", price: 50 },
-                    { label: "5g", price: 80 },
-                    { label: "10g", price: 160 },
-                    { label: "20g", price: 280 },
-                    { label: "50g", price: 510 },
-                    { label: "100g", price: 960 }
-                ],
-                variantsMeetup: [
-                    { label: "1g", price: 20 },
-                    { label: "2g", price: 30 },
-                    { label: "5g", price: 70 },
-                    { label: "10g", price: 150 },
-                    { label: "20g", price: 270 },
-                    { label: "50g", price: 500 },
-                    { label: "100g", price: 950 }
-                ]
-            },
-            {
-                id: "w_jungle",
-                name: "Jungle Wasabi \uD83C\uDF34",
-                category: "Fleurs",
-                image: "\uD83E\uDD66",
-                desc: "Cali Top Shelf. Puissant.",
-                tag: "PREMIUM",
-                stats: { views: 89, likes: 32, sales: 5 },
-                variantsLivraison: [
-                    { label: "5g", price: 65 },
-                    { label: "10g", price: 95 }
-                ],
-                variantsMeetup: [
-                    { label: "5g", price: 55 },
-                    { label: "10g", price: 85 }
-                ]
-            }
-        ];
+        let PRODUCTS = [];
         const CATEGORIES = [
             { id: "all", name: "Tout", icon: "grid" },
             { id: "Fleurs", name: "🌿 Fleurs", icon: "leaf" },
@@ -1283,11 +1219,8 @@
         }
 
         // Envoi réel sur Telegram
-        function sendOrder() {
+        function generateOrderMsg() {
             const addr = document.getElementById('address-input').value.trim();
-            state.userProfile.orderCount++;
-            localStorage.setItem('ocat_order_count', state.userProfile.orderCount);
-
             const modeLabel = deliveryMode === 'meetup' ? '📍 Meet-up (lieu à convenir)' : '🚗 Livraison à domicile';
             const now = new Date();
             const dateStr = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
@@ -1313,6 +1246,22 @@
             msg += `💰 TOTAL : ${total.toFixed(0)}€\n`;
             msg += `━━━━━━━━━━━━━━━━━━━━━`;
 
+            return msg;
+        }
+
+        function copyOrderText() {
+            const msg = generateOrderMsg();
+            navigator.clipboard.writeText(msg).then(() => {
+                alert("✅ Commande copiée ! Vous pouvez la coller directement dans le chat.");
+            }).catch(() => {
+                alert("❌ Erreur lors de la copie de la commande.");
+            });
+        }
+
+        function sendOrder() {
+            state.userProfile.orderCount++;
+            localStorage.setItem('ocat_order_count', state.userProfile.orderCount);
+            const msg = generateOrderMsg();
             closeConfirmModal();
             window.open(`https://t.me/OCAT312?text=${encodeURIComponent(msg)}`, '_blank');
         }
@@ -1376,14 +1325,17 @@
         }
 
         // ─── SWIPE TO CLOSE ────────────────────────────────────────────────────
-        function initSwipe(modalId, handleId, closeCallback) {
+        function initSwipe(modalId, closeCallback) {
             const modal = document.getElementById(modalId);
-            const handle = document.getElementById(handleId);
-            if (!modal || !handle) return;
+            if (!modal) return;
             let startY = 0, currentY = 0, dragging = false;
             const THRESHOLD = 80;
 
             function onStart(e) {
+                // Ignore si on est en train de scroller le contenu interne (pas tout en haut)
+                const scrollable = e.target.closest('.overflow-y-auto');
+                if (scrollable && scrollable.scrollTop > 5) return;
+
                 const t = e.touches ? e.touches[0] : e;
                 startY = t.clientY;
                 dragging = true;
@@ -1392,14 +1344,17 @@
             function onMove(e) {
                 if (!dragging) return;
                 const t = e.touches ? e.touches[0] : e;
+                // On ne permet de glisser que vers le bas
                 currentY = Math.max(0, t.clientY - startY);
-                modal.style.transform = `translateY(${currentY}px)`;
-                modal.style.opacity = String(Math.max(0.4, 1 - currentY / 400));
+                if (currentY > 0) {
+                    modal.style.transform = `translateY(${currentY}px)`;
+                    modal.style.opacity = String(Math.max(0.4, 1 - currentY / 400));
+                }
             }
             function onEnd() {
                 if (!dragging) return;
                 dragging = false;
-                modal.style.transition = '';
+                modal.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s';
                 if (currentY > THRESHOLD) {
                     modal.style.transform = 'translateY(110%)';
                     modal.style.opacity = '0';
@@ -1409,25 +1364,25 @@
                         closeCallback();
                     }, 280);
                 } else {
-                    modal.style.transform = '';
-                    modal.style.opacity = '';
+                    modal.style.transform = 'translateY(0)';
+                    modal.style.opacity = '1';
                 }
                 currentY = 0;
             }
 
-            // Touch uniquement sur le handle
-            handle.addEventListener('touchstart', onStart, { passive: true });
+            // Bind sur tout le modal pour plus grande fluidité
+            modal.addEventListener('touchstart', onStart, { passive: true });
             document.addEventListener('touchmove', onMove, { passive: true });
             document.addEventListener('touchend', onEnd);
             // Mouse pour debug desktop
-            handle.addEventListener('mousedown', onStart);
+            modal.addEventListener('mousedown', onStart);
             document.addEventListener('mousemove', onMove);
             document.addEventListener('mouseup', onEnd);
         }
 
         function initAllSwipes() {
-            initSwipe('cart-modal', 'cart-swipe-handle', () => toggleCart(false));
-            initSwipe('product-detail-modal', 'detail-swipe-handle', () => closeProductDetail());
+            initSwipe('cart-modal', () => toggleCart(false));
+            initSwipe('product-detail-modal', () => closeProductDetail());
         }
 
         window.onload = () => { init(); initAllSwipes(); };
