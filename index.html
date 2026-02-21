@@ -490,16 +490,31 @@
                     <a href="https://t.me/+bFpGFT5HLzoyZGM0" target="_blank"
                         class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
                         style="background:var(--surface)">
-                        <i data-lucide="send" class="w-5 h-5" style="color:var(--neon)"></i> Rejoindre le Canal Telegram
+                        <i data-lucide="send" class="w-5 h-5" style="color:var(--neon)"></i> Canal Telegram
                     </a>
 
-                    <!-- Bouton Canal Luffa (vide pour le moment) -->
-                    <button disabled
-                        class="w-full flex items-center justify-center gap-3 border border-[#222] text-[#444] font-bold py-3.5 rounded-2xl cursor-not-allowed"
+                    <!-- Bouton Instagram -->
+                    <a href="https://www.instagram.com/o.c.a.t.31?igsh=MWpkbTR4NHlpaGRzcQ%3D%3D&utm_source=qr"
+                        target="_blank"
+                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
                         style="background:var(--surface)">
-                        <i data-lucide="gem" class="w-5 h-5 text-[#333]"></i> Rejoindre le Canal Luffa
-                        <span class="text-[10px] text-[#333] font-normal ml-1">(bientôt)</span>
-                    </button>
+                        <i data-lucide="instagram" class="w-5 h-5" style="color:var(--neon)"></i> Instagram
+                    </a>
+
+                    <!-- Bouton Snapchat -->
+                    <a href="https://snapchat.com/t/WliEDA0H" target="_blank"
+                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
+                        style="background:var(--surface)">
+                        <i data-lucide="ghost" class="w-5 h-5" style="color:var(--neon)"></i> Snapchat
+                    </a>
+
+                    <!-- Bouton Patato -->
+                    <a href="https://tutuduanyu.org/ocat312" target="_blank"
+                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
+                        style="background:var(--surface)">
+                        <i data-lucide="message-square" class="w-5 h-5" style="color:var(--neon)"></i> Suivez-nous sur
+                        Patato
+                    </a>
 
                     <!-- Bouton Gérant -->
                     <a href="https://t.me/OCAT312" target="_blank"
@@ -726,11 +741,7 @@
 
         // ─── CATALOGUE INLINE (toujours disponible, même sans réseau) ──────────
         let PRODUCTS = [];
-        const CATEGORIES = [
-            { id: "all", name: "Tout", icon: "grid" },
-            { id: "Fleurs", name: "🌿 Fleurs", icon: "leaf" },
-            { id: "Résines", name: "🍫 Résines", icon: "droplets" }
-        ];
+        let CATEGORIES = [{ id: "all", name: "Tout" }];
 
         // delivery mode: 'livraison' or 'meetup'
         let deliveryMode = 'livraison';
@@ -790,12 +801,23 @@
                     const data = await r.json();
                     if (data && data.length > 0) {
                         PRODUCTS = data;
+                        extractCategories();
                         if (state.view === 'shop') renderProducts();
                     }
                 }
             } catch (e) {
                 console.log("Chargement menu distant échoué — données inline conservées.");
             }
+        }
+
+        function extractCategories() {
+            const uniqueCats = new Set(PRODUCTS.map(p => p.category).filter(c => c));
+            CATEGORIES = [{ id: "all", name: "Tout" }];
+            const catArr = Array.from(uniqueCats).sort();
+            catArr.forEach(c => {
+                CATEGORIES.push({ id: c, name: c });
+            });
+            renderCategories();
         }
 
         // ─── MEDIA ─────────────────────────────────────────────────────────────
@@ -1281,11 +1303,12 @@
         }
         function addNewProduct() {
             PRODUCTS.unshift({
-                id: 'prod_' + Date.now(), name: "Nouveau Produit", category: state.category === 'all' ? 'Fleurs' : state.category,
+                id: 'prod_' + Date.now(), name: "Nouveau Produit", category: state.category === 'all' ? 'Weeds' : state.category,
                 desc: "Description du produit.", image: "📦", tag: "NEW", stats: { views: 0, likes: 0, sales: 0 },
                 variantsLivraison: [{ label: "5g", price: 50 }],
                 variantsMeetup: [{ label: "5g", price: 45 }]
             });
+            extractCategories();
             renderProducts(); openEditModal(PRODUCTS[0].id);
         }
         function openEditModal(id) {
