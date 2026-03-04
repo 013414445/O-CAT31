@@ -5,38 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>O'Charbon Avant Tout 31</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Fonts: Inter & Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        primary: '#39ff14',
-                        'primary-dark': '#28cc0e',
-                        'primary-dim': '#1a7a08',
-                        background: '#080808',
+                        primary: '#39FF14',
+                        'primary-dark': '#2EBF12',
+                        background: '#050505',
                         surface: '#111111',
-                        'surface-2': '#1a1a1a',
-                        secondary: '#8a8a8a',
-                        anthracite: '#2d2d2d',
-                        gold: '#fbbf24'
+                        'surface-2': '#1A1A1A',
+                        secondary: '#8a8a8a'
                     },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'neon': '0 0 15px rgba(57, 255, 20, 0.4)',
+                        'neon-lg': '0 0 25px rgba(57, 255, 20, 0.6)'
+                    }
                 }
             }
         }
     </script>
     <style>
         :root {
-            --neon: #39ff14;
-            --neon-dim: rgba(57, 255, 20, 0.15);
-            --bg: #080808;
+            --neon: #39FF14;
+            --bg: #050505;
             --surface: #111111;
-            --surface2: #1a1a1a;
         }
 
         * {
@@ -45,10 +53,19 @@
 
         body {
             background-color: var(--bg);
-            color: white;
+            color: #ffffff;
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
             overscroll-behavior-y: none;
+        }
+
+        /* Material Symbols Helper */
+        .ms {
+            font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .hide-scrollbar::-webkit-scrollbar {
@@ -61,13 +78,13 @@
         }
 
         .fade-in {
-            animation: fadeIn 0.35s ease-out;
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(12px);
+                transform: translateY(15px);
             }
 
             to {
@@ -76,14 +93,8 @@
             }
         }
 
-        .custom-checkbox {
-            accent-color: var(--neon);
-            width: 1.2rem;
-            height: 1.2rem;
-        }
-
         .modal-base {
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .modal-closed {
@@ -94,59 +105,211 @@
             transform: translateY(0);
         }
 
-        /* Neon glow effects */
-        .neon-border {
-            border-color: var(--neon) !important;
+        /* Stealth Glass Panels */
+        .glass-panel {
+            background: rgba(17, 17, 17, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Neon Text & Elements */
+        .text-neon {
+            color: var(--neon);
+            text-shadow: 0 0 15px rgba(57, 255, 20, 0.6);
+        }
+
+        .border-neon {
+            border-color: var(--neon);
             box-shadow: 0 0 12px rgba(57, 255, 20, 0.3);
         }
 
-        .neon-text {
-            color: var(--neon);
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
-        }
-
+        /* Buttons */
         .neon-btn {
             background: var(--neon);
-            color: #080808;
+            color: #050505;
             font-weight: 900;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
             transition: all 0.2s;
         }
 
         .neon-btn:hover,
         .neon-btn:active {
-            background: #28cc0e;
+            background: #2EBF12;
             transform: scale(0.97);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.6);
         }
 
-        /* Delivery toggle */
+        /* Category Tabs (Underline Style) */
+        .cat-tab {
+            position: relative;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #888;
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        .cat-tab.active {
+            color: var(--neon);
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+        }
+
+        .cat-tab .tab-bar {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 3px;
+            width: 0;
+            background: var(--neon);
+            border-radius: 4px 4px 0 0;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
+        }
+
+        .cat-tab.active .tab-bar {
+            width: 70%;
+        }
+
+        /* Delivery Toggle */
         .delivery-toggle {
             display: flex;
-            background: var(--surface2);
-            border-radius: 12px;
-            padding: 4px;
-            gap: 4px;
+            background: #111;
+            border-radius: 14px;
+            padding: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .delivery-toggle button {
             flex: 1;
-            padding: 10px 8px;
-            border-radius: 9px;
+            padding: 12px 10px;
+            border-radius: 10px;
             font-size: 13px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
+            font-weight: 800;
             color: #888;
-            background: transparent;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .delivery-toggle button.active {
             background: var(--neon);
-            color: #080808;
-            box-shadow: 0 0 14px rgba(57, 255, 20, 0.4);
+            color: #050505;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
         }
 
-        /* Video */
+        /* Inputs */
+        .ocat-input {
+            width: 100%;
+            background: #111;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: white;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .ocat-input:focus {
+            border-color: var(--neon);
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+        }
+
+        .custom-checkbox {
+            accent-color: var(--neon);
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+
+        /* Toast */
+        #cart-toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--neon);
+            color: #050505;
+            font-weight: 900;
+            font-size: 13px;
+            padding: 12px 24px;
+            border-radius: 99px;
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.6);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        #cart-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Product Cards */
+        .product-card {
+            background: #0A0A0A;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            transition: all 0.2s;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            border: 1px solid var(--neon);
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .product-card:active {
+            transform: scale(0.98);
+        }
+
+        .product-card:active::before {
+            opacity: 0.5;
+        }
+
+        .badge-pulse {
+            animation: pulseBadge 2s infinite;
+        }
+
+        @keyframes pulseBadge {
+            0% {
+                box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 6px rgba(251, 191, 36, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+            }
+        }
+
+        .swipe-handle {
+            width: 48px;
+            height: 5px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 12px auto 8px;
+            cursor: grab;
+        }
+
         .video-wrapper {
             position: relative;
             width: 100%;
@@ -164,199 +327,20 @@
 
         .fs-btn {
             position: absolute;
-            bottom: 8px;
-            right: 8px;
+            bottom: 12px;
+            right: 12px;
             z-index: 50;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            padding: 6px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 8px;
             border-radius: 50%;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.2s;
         }
 
         .fs-btn:active {
             transform: scale(0.9);
-        }
-
-        /* Product card */
-        .product-card {
-            background: var(--surface);
-            border: 1px solid #222;
-            border-radius: 18px;
-            transition: border-color 0.2s, transform 0.15s;
-        }
-
-        .product-card:active {
-            transform: scale(0.98);
-            border-color: var(--neon);
-        }
-
-        /* Header logo */
-        .header-logo {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid var(--neon);
-            box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
-            flex-shrink: 0;
-        }
-
-        .header-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Scrollable category pills */
-        .cat-pill {
-            padding: 6px 16px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 700;
-            white-space: nowrap;
-            border: 1px solid #333;
-            cursor: pointer;
-            transition: all 0.18s;
-            background: var(--surface);
-            color: #888;
-        }
-
-        .cat-pill.active {
-            background: var(--neon);
-            color: #080808;
-            border-color: var(--neon);
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.35);
-        }
-
-        /* Input fields */
-        .ocat-input {
-            width: 100%;
-            background: var(--surface2);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 10px 14px;
-            font-size: 13px;
-            color: white;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .ocat-input:focus {
-            border-color: var(--neon);
-        }
-
-        /* Price badge */
-        .price-badge {
-            color: var(--neon);
-            font-weight: 900;
-            font-size: 1.1rem;
-        }
-
-        /* Variant select */
-        select.ocat-input option {
-            background: var(--surface2);
-        }
-
-        /* Address field animation */
-        #address-wrap {
-            overflow: hidden;
-            transition: max-height 0.3s ease, opacity 0.3s ease;
-            max-height: 120px;
-            opacity: 1;
-        }
-
-        #address-wrap.hidden-animated {
-            max-height: 0;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* ── Toast "Ajouté au panier" ── */
-        #cart-toast {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: var(--neon);
-            color: #080808;
-            font-weight: 900;
-            font-size: 13px;
-            padding: 10px 22px;
-            border-radius: 99px;
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
-            z-index: 9999;
-            opacity: 0;
-            transition: opacity 0.2s ease, transform 0.25s ease;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-
-        #cart-toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* ── Pulse badge panier ── */
-        @keyframes badgePop {
-            0% {
-                transform: scale(1);
-            }
-
-            40% {
-                transform: scale(1.5);
-            }
-
-            70% {
-                transform: scale(0.9);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .badge-pop {
-            animation: badgePop 0.4s cubic-bezier(.36, .07, .19, .97) forwards;
-        }
-
-        /* ── Badge stock ── */
-        .stock-badge-low {
-            background: #ff6b00;
-            color: #fff;
-            font-size: 9px;
-            font-weight: 900;
-            padding: 2px 7px;
-            border-radius: 99px;
-            letter-spacing: 0.03em;
-        }
-
-        .stock-badge-out {
-            background: #ff2222;
-            color: #fff;
-            font-size: 9px;
-            font-weight: 900;
-            padding: 2px 7px;
-            border-radius: 99px;
-        }
-
-        /* ── Carte produit en rupture ── */
-        .product-card.out-of-stock {
-            opacity: 0.45;
-            pointer-events: none;
-        }
-
-        /* ── Swipe handle ── */
-        .swipe-handle {
-            width: 40px;
-            height: 5px;
-            border-radius: 99px;
-            background: #444;
-            margin: 10px auto 4px;
-            cursor: grab;
         }
     </style>
 </head>
@@ -366,170 +350,216 @@
     <!-- Toast notification -->
     <div id="cart-toast">✓ Ajouté au panier !</div>
 
-    <!-- HEADER -->
-    <header id="main-header" class="sticky top-0 z-30 backdrop-blur-md px-4 pt-3 pb-2 border-b border-[#1e1e1e] hidden"
-        style="background: rgba(8,8,8,0.97)">
+    <!-- HEADER — Stitch Stealth Neon -->
+    <header id="main-header" class="sticky top-0 z-30 glass-panel border-b border-white/5 px-4 pt-4 pb-2 hidden"
+        style="background: rgba(5,5,5,0.95)">
         <div class="flex items-center justify-between mb-3">
-            <button onclick="switchView('landing')" class="flex items-center gap-2.5 group text-left">
-                <div class="header-logo">
+            <button onclick="switchView('landing')" class="flex items-center gap-2.5 text-left group">
+                <div
+                    class="w-10 h-10 rounded-full border-2 border-primary flex items-center justify-center overflow-hidden shadow-neon shrink-0 bg-[#0A0A0A]">
                     <img src="images/ocat_logo.jpg" id="header-logo-img" alt="O'CAT 31"
-                        onerror="this.parentElement.innerHTML='<span style=\'font-size:18px;display:flex;align-items:center;justify-content:center;height:100%;background:#111\'>🔥</span>'">
+                        class="w-full h-full object-cover"
+                        onerror="this.parentElement.innerHTML='<span style=&quot;font-size:18px&quot;>🔥</span>'">
                 </div>
                 <div>
-                    <h1 class="text-base font-black leading-none text-white tracking-tight">O'CAT 31</h1>
-                    <span class="text-[10px] font-bold uppercase neon-text" id="user-status-badge">Shop Officiel</span>
+                    <h1
+                        class="text-base font-black leading-none text-white tracking-tight group-hover:text-primary transition-colors">
+                        O'CAT 31</h1>
+                    <span class="text-[10px] font-bold uppercase text-neon" id="user-status-badge">Shop Officiel</span>
                 </div>
             </button>
             <div class="flex items-center gap-2">
                 <div id="admin-controls" class="hidden flex gap-2">
                     <button onclick="addNewProduct()"
-                        class="bg-blue-600 text-white px-2 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1"><i
-                            data-lucide="plus-circle" class="w-4 h-4"></i></button>
+                        class="bg-blue-600 hover:bg-blue-500 text-white px-2 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1">
+                        <span class="ms" style="font-size:14px">add_circle</span>
+                    </button>
                     <button onclick="exportMenuJson()"
-                        class="bg-red-500 text-white px-2 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1 animate-pulse"><i
-                            data-lucide="save" class="w-4 h-4"></i></button>
+                        class="bg-red-500 hover:bg-red-600 text-white px-2 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1 animate-pulse">
+                        <span class="ms" style="font-size:14px">save</span>
+                    </button>
                 </div>
-                <button onclick="toggleCart(true)" class="relative p-1 ml-1">
-                    <i data-lucide="shopping-cart" class="text-white w-6 h-6"></i>
+                <button onclick="toggleCart(true)"
+                    class="relative h-10 w-10 flex items-center justify-center rounded-full bg-[#111] border border-white/10 text-white hover:border-primary/50 transition-colors">
+                    <span class="ms" style="font-size:22px">shopping_bag</span>
                     <span id="header-cart-count"
-                        class="absolute -top-1 -right-1 text-[#080808] text-[10px] font-black w-4 h-4 flex items-center justify-center rounded-full hidden"
-                        style="background:var(--neon)">0</span>
+                        class="absolute -top-1 -right-1 bg-primary text-[#050505] text-[10px] font-black w-4 h-4 flex items-center justify-center rounded-full hidden shadow-neon">0</span>
                 </button>
-                <button onclick="switchView('profile')" class="relative ml-1">
+                <button onclick="switchView('profile')" class="ml-1">
                     <div id="header-avatar"
-                        class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white border border-[#333] overflow-hidden"
+                        class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white border border-primary/30 overflow-hidden"
                         style="background:linear-gradient(135deg,#1a4a0a,#0d2006)">
-                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span class="ms" style="font-size:18px">person</span>
                     </div>
                 </button>
-                <button id="logout-btn" onclick="logout()" class="hidden p-1 text-[#555] hover:text-red-400 ml-1"><i
-                        data-lucide="log-out" class="w-6 h-6"></i></button>
+                <button id="logout-btn" onclick="logout()" class="hidden p-1 text-[#555] hover:text-red-400 ml-1">
+                    <span class="ms" style="font-size:20px">logout</span>
+                </button>
             </div>
         </div>
-        <div class="relative mb-3">
-            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#555] w-4 h-4"></i>
-            <input type="text" id="search-input" placeholder="Rechercher un produit..." class="ocat-input pl-9 text-xs">
+        <!-- Search bar -->
+        <div class="relative mb-3 group">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <span class="ms text-[#555] group-focus-within:text-primary transition-colors"
+                    style="font-size:18px">search</span>
+            </div>
+            <input type="text" id="search-input" placeholder="Rechercher un produit..."
+                class="block w-full rounded-xl border-none bg-[#111] py-2.5 pl-10 pr-4 text-sm text-white placeholder-[#555] focus:ring-1 focus:ring-primary transition-all shadow-inner outline-none">
         </div>
-        <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1" id="category-container"></div>
+        <!-- Category tabs -->
+        <div class="flex border-b border-white/5 gap-5 overflow-x-auto hide-scrollbar" id="category-container"></div>
     </header>
 
     <main class="p-4 min-h-screen" id="app-container">
 
-        <!-- 1. LANDING -->
-        <div id="view-landing" class="fade-in space-y-8 pb-10">
+        <!-- 1. LANDING — Stitch Stealth Neon -->
+        <div id="view-landing" class="fade-in space-y-6 pb-12">
             <!-- Hero -->
-            <div class="text-center space-y-5 py-6">
-                <div class="relative w-28 h-28 mx-auto">
-                    <div class="w-28 h-28 rounded-full overflow-hidden border-2 mx-auto shadow-xl"
-                        style="border-color:var(--neon); box-shadow:0 0 30px rgba(57,255,20,0.3)">
+            <div class="text-center space-y-4 py-8 relative">
+                <div
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary/10 rounded-full blur-[50px] pointer-events-none">
+                </div>
+                <div class="relative w-32 h-32 mx-auto mb-6">
+                    <div
+                        class="w-32 h-32 rounded-full overflow-hidden border-2 border-primary mx-auto shadow-neon bg-[#0A0A0A] relative z-10">
                         <img src="images/ocat_logo.jpg" id="landing-logo-img" alt="O'CAT 31"
                             class="w-full h-full object-cover"
-                            onerror="this.parentElement.innerHTML='<span style=\'font-size:52px;display:flex;align-items:center;justify-content:center;height:100%;background:#111\'>🔥</span>'">
+                            onerror="this.parentElement.innerHTML='<span style=&quot;font-size:52px&quot;>🔥</span>'">
                     </div>
                 </div>
-                <div>
-                    <h2 class="text-2xl font-black text-white leading-tight">O'Charbon Avant Tout 31</h2>
-                    <p class="neon-text text-sm font-bold mt-1">Qualité • Discrétion • Proximité</p>
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-black text-white leading-tight mb-2">O'CAT <span
+                            class="text-neon">31</span></h2>
+                    <p class="text-slate-400 font-medium px-6 text-sm">Qualité <span class="text-primary">•</span>
+                        Discrétion <span class="text-primary">•</span> Proximité</p>
                 </div>
-                <p class="text-[#888] text-sm leading-relaxed px-4">
-                    Votre shop local de confiance dans le 31. Remise en main propre ou livraison rapide.<br>
-                    <strong class="text-white">Sélection premium, emballage soigné, service irréprochable.</strong>
+                <p class="text-[#888] text-sm leading-relaxed px-6 relative z-10">
+                    Votre shop local de confiance dans le 31.<br>
+                    <strong class="text-white mt-2 inline-block">Premium Selection & Service Irréprochable.</strong>
                 </p>
                 <button onclick="switchView('shop')"
-                    class="neon-btn px-8 py-3.5 rounded-full text-sm inline-flex items-center gap-2 shadow-lg"
-                    style="box-shadow:0 0 20px rgba(57,255,20,0.35)">
-                    <i data-lucide="shopping-bag" class="w-4 h-4"></i> Voir le Menu
+                    class="neon-btn px-8 py-4 rounded-2xl text-base inline-flex items-center justify-center gap-2 mt-4 relative z-10 w-[80%] mx-auto">
+                    <span class="ms text-[20px]">explore</span> Voir le Menu
                 </button>
             </div>
 
             <!-- Comment Commander -->
-            <section class="space-y-3 px-1">
-                <h3 class="font-black text-lg flex items-center gap-2 text-white"><i data-lucide="help-circle"
-                        class="w-5 h-5" style="color:var(--neon)"></i> Comment commander ?</h3>
-                <div class="rounded-2xl p-4 border border-[#222] text-sm space-y-3 text-[#aaa]"
-                    style="background:var(--surface)">
-                    <p><strong class="text-white">1. Consultez le menu</strong> et choisissez votre produit + quantité.
-                    </p>
-                    <p><strong class="text-white">2. Choisissez votre mode de remise :</strong> 🚗 Livraison (adresse
-                        requise) ou 📍 Meet-up (rendez-vous convenu ensemble).</p>
-                    <p><strong class="text-white">3. Validez votre panier</strong> — votre commande est envoyée
-                        directement au gérant via Telegram.</p>
-                    <p><strong style="color:var(--neon)">4. Paiement en espèces</strong> à la livraison / remise en main
-                        propre uniquement.</p>
+            <section class="space-y-3 px-2">
+                <div class="glass-panel rounded-2xl p-5 space-y-4 relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 text-white/5">
+                        <span class="ms" style="font-size:100px">help</span>
+                    </div>
+                    <h3 class="font-black text-lg flex items-center gap-2 text-white relative z-10">
+                        <span class="ms text-primary text-[22px]">info</span> Comment commander ?
+                    </h3>
+                    <ul class="space-y-3 relative z-10 text-sm text-[#aaa]">
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex items-center justify-center w-5 h-5 rounded-full bg-white/10 text-white text-[10px] font-bold shrink-0 mt-0.5 border border-white/20">1</span>
+                            <span><strong class="text-white">Consultez le menu</strong> et choisissez vos
+                                produits.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex items-center justify-center w-5 h-5 rounded-full bg-white/10 text-white text-[10px] font-bold shrink-0 mt-0.5 border border-white/20">2</span>
+                            <span><strong class="text-white">Choisissez la remise :</strong> Livraison 🚗 ou Meet-up
+                                📍.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex items-center justify-center w-5 h-5 rounded-full bg-white/10 text-white text-[10px] font-bold shrink-0 mt-0.5 border border-white/20">3</span>
+                            <span><strong class="text-white">Validez le panier</strong> (envoyé sur Telegram).</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="border-neon w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5"><span
+                                    class="ms text-[14px]">done</span></span>
+                            <span><strong class="text-primary">Paiement espèces</strong> à la remise uniquement.</span>
+                        </li>
+                    </ul>
                 </div>
             </section>
 
-            <!-- Modes de remise -->
-            <section class="space-y-3 px-1">
-                <h3 class="font-black text-lg flex items-center gap-2 text-white"><i data-lucide="map-pin"
-                        class="w-5 h-5" style="color:var(--neon)"></i> Modes de Remise</h3>
+            <!-- Modes de Remise -->
+            <section class="space-y-3 px-2">
+                <h3 class="font-black text-lg flex items-center gap-2 text-white px-2">
+                    <span class="ms text-primary text-[22px]">local_shipping</span> Modes de Remise
+                </h3>
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="rounded-2xl p-4 border-l-4 border-l-[#39ff14] border-t border-r border-b border-[#222]"
-                        style="background:var(--surface)">
-                        <div class="font-black text-white mb-2 text-base">🚗 Livraison</div>
-                        <p class="text-xs text-[#888] leading-relaxed">Livraison à domicile dans le 31. Tarifs
-                            légèrement supérieurs. Adresse requise.</p>
+                    <div class="glass-panel rounded-xl p-4 border-t-2 border-t-primary relative overflow-hidden">
+                        <div class="font-black text-white mb-1.5 flex items-center gap-1.5"><span
+                                class="ms text-primary text-[18px]">directions_car</span> Livraison</div>
+                        <p class="text-[11px] text-[#888] leading-relaxed">À domicile dans le 31. Tarifs ajustés.
+                            Adresse requise.</p>
                     </div>
-                    <div class="rounded-2xl p-4 border-l-4 border-l-blue-500 border-t border-r border-b border-[#222]"
-                        style="background:var(--surface)">
-                        <div class="font-black text-white mb-2 text-base">📍 Meet-up</div>
-                        <p class="text-xs text-[#888] leading-relaxed">Rendez-vous convenu ensemble. Meilleurs tarifs.
-                            Lieu défini par message.</p>
+                    <div class="glass-panel rounded-xl p-4 border-t-2 border-t-blue-500 relative overflow-hidden">
+                        <div class="font-black text-white mb-1.5 flex items-center gap-1.5"><span
+                                class="ms text-blue-400 text-[18px]">handshake</span> Meet-up</div>
+                        <p class="text-[11px] text-[#888] leading-relaxed">RDV convenu ensemble. Meilleurs tarifs.</p>
                     </div>
-                </div>
-                <div class="text-center text-xs text-[#555] mt-1 italic">
-                    Paiement en espèces uniquement — remise en main propre.
                 </div>
             </section>
 
             <!-- Liens utiles -->
-            <section class="text-center pt-4 pb-4 border-t border-[#1a1a1a] px-1">
-                <p class="text-sm text-[#555] mb-4">Rejoignez-nous &amp; contactez-nous</p>
+            <section class="px-2 pt-4">
+                <h3 class="font-black text-sm text-center text-[#555] uppercase tracking-widest mb-4">Réseaux & Contact
+                </h3>
                 <div class="flex flex-col gap-3 max-w-sm mx-auto">
-                    <!-- Bouton Canal Telegram -->
                     <a href="https://t.me/+bFpGFT5HLzoyZGM0" target="_blank"
-                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
-                        style="background:var(--surface)">
-                        <i data-lucide="send" class="w-5 h-5" style="color:var(--neon)"></i> Canal Telegram
+                        class="glass-panel flex items-center justify-between p-4 rounded-xl hover:border-primary/50 transition-colors group">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                                <span class="ms" style="font-size:22px">send</span>
+                            </div>
+                            <span class="text-white font-bold">Canal Telegram</span>
+                        </div>
+                        <span class="ms text-[#444] group-hover:text-primary transition-colors">chevron_right</span>
                     </a>
-
-                    <!-- Bouton Instagram -->
-                    <a href="https://www.instagram.com/o.c.a.t.31?igsh=MWpkbTR4NHlpaGRzcQ%3D%3D&utm_source=qr"
-                        target="_blank"
-                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
-                        style="background:var(--surface)">
-                        <i data-lucide="instagram" class="w-5 h-5" style="color:var(--neon)"></i> Instagram
+                    <a href="https://www.instagram.com/o.c.a.t.31" target="_blank"
+                        class="glass-panel flex items-center justify-between p-4 rounded-xl hover:border-primary/50 transition-colors group">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-pink-500/10 flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform">
+                                <span class="ms" style="font-size:22px">photo_camera</span>
+                            </div>
+                            <span class="text-white font-bold">Instagram</span>
+                        </div>
+                        <span class="ms text-[#444] group-hover:text-primary transition-colors">chevron_right</span>
                     </a>
-
-                    <!-- Bouton Snapchat -->
                     <a href="https://snapchat.com/t/WliEDA0H" target="_blank"
-                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
-                        style="background:var(--surface)">
-                        <i data-lucide="ghost" class="w-5 h-5" style="color:var(--neon)"></i> Snapchat
+                        class="glass-panel flex items-center justify-between p-4 rounded-xl hover:border-primary/50 transition-colors group">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-400 group-hover:scale-110 transition-transform">
+                                <span class="ms" style="font-size:22px">sentiment_very_satisfied</span>
+                            </div>
+                            <span class="text-white font-bold">Snapchat</span>
+                        </div>
+                        <span class="ms text-[#444] group-hover:text-primary transition-colors">chevron_right</span>
                     </a>
-
-                    <!-- Bouton Patato -->
-                    <a href="https://tutuduanyu.org/ocat312" target="_blank"
-                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
-                        style="background:var(--surface)">
-                        <i data-lucide="message-square" class="w-5 h-5" style="color:var(--neon)"></i> Suivez-nous sur
-                        Patato
-                    </a>
-
-                    <!-- Bouton Gérant -->
                     <a href="https://t.me/OCAT312" target="_blank"
-                        class="w-full flex items-center justify-center gap-3 border border-[#333] text-white font-bold py-3.5 rounded-2xl hover:border-[#39ff14] transition-all"
-                        style="background:var(--surface)">
-                        <i data-lucide="life-buoy" class="w-5 h-5" style="color:var(--neon)"></i> Contacter le Gérant
+                        class="glass-panel flex items-center justify-between p-4 rounded-xl hover:border-primary/50 transition-colors group mt-2 border-white/20">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-neon">
+                                <span class="ms" style="font-size:22px">support_agent</span>
+                            </div>
+                            <div>
+                                <span class="text-white font-bold block">Contacter le Gérant</span>
+                                <span class="text-[10px] text-primary">Support & Commandes</span>
+                            </div>
+                        </div>
+                        <span class="ms text-[#444] group-hover:text-primary transition-colors">chevron_right</span>
                     </a>
                 </div>
             </section>
 
-            <!-- Admin login caché -->
-            <div class="pt-4 w-full flex justify-center mt-2 mb-6">
-                <button onclick="adminLoginPrompt()" class="text-[#1e1e1e] hover:text-[#333] transition-colors p-2"
-                    title="Admin Access">
-                    <i data-lucide="lock" class="w-4 h-4"></i>
+            <!-- Admin login -->
+            <div class="pt-6 pb-2 w-full flex justify-center">
+                <button onclick="adminLoginPrompt()"
+                    class="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center text-[#222] hover:text-primary hover:border-primary/30 transition-all opacity-50 hover:opacity-100">
+                    <span class="ms" style="font-size:14px">admin_panel_settings</span>
                 </button>
             </div>
         </div>
@@ -545,32 +575,53 @@
         </div>
 
         <!-- 3. PROFIL -->
-        <div id="view-profile" class="hidden fade-in pb-20">
-            <button onclick="switchView('shop')" class="mb-4 text-[#888] flex items-center gap-2 text-sm"><i
-                    data-lucide="arrow-left" class="w-4 h-4"></i> Retour au Shop</button>
-            <div class="border border-[#222] rounded-2xl p-6 mb-6 flex flex-col items-center text-center relative overflow-hidden"
-                style="background:var(--surface)">
-                <div class="absolute top-0 left-0 w-full h-20"
-                    style="background:linear-gradient(135deg,rgba(57,255,20,0.08),rgba(0,100,0,0.12))"></div>
-                <div class="w-24 h-24 rounded-full border-4 z-10 flex items-center justify-center text-3xl mb-3 shadow-xl"
-                    style="background:linear-gradient(135deg,#1a4a0a,#0d2006);border-color:var(--neon)"
-                    id="profile-pic-large">👤</div>
-                <h2 class="text-xl font-black text-white" id="profile-name">Invité</h2>
-                <p class="text-sm font-mono mb-4" style="color:var(--neon)" id="profile-username">@loading...</p>
-                <div class="grid grid-cols-2 gap-4 w-full mt-2">
-                    <div class="p-3 rounded-xl border border-[#222]" style="background:rgba(255,255,255,0.03)">
-                        <p class="text-xs text-[#555] uppercase font-bold">ID Telegram</p>
-                        <p class="text-sm font-mono text-white" id="profile-id">---</p>
+        <div id="view-profile" class="hidden fade-in pb-20 mt-4">
+            <button onclick="switchView('shop')"
+                class="mb-6 text-[#888] hover:text-white transition-colors flex items-center gap-2 text-sm font-bold tracking-wide uppercase px-2"><span
+                    class="ms" style="font-size:18px">arrow_back</span> Retour au Shop</button>
+            <div
+                class="glass-panel border border-primary/20 rounded-[2rem] p-8 mb-8 flex flex-col items-center text-center relative overflow-hidden shadow-neon-lg">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-50">
+                </div>
+                <!-- bg mesh effect -->
+                <div
+                    class="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none">
+                </div>
+                <div
+                    class="absolute -bottom-10 -left-10 w-32 h-32 bg-primary/10 rounded-full blur-[40px] pointer-events-none">
+                </div>
+
+                <div class="w-28 h-28 rounded-full z-10 flex items-center justify-center text-4xl mb-4 shadow-xl border-4 border-[#050505] relative grow-avatar"
+                    style="background:linear-gradient(135deg,#0a0a0a,#111)" id="profile-pic-large">👤</div>
+                <h2 class="text-2xl font-black text-white relative z-10 tracking-tight" id="profile-name">Invité</h2>
+                <p class="text-[13px] font-bold mt-1 mb-6 text-primary tracking-wide relative z-10"
+                    id="profile-username">@loading...</p>
+                <div class="grid grid-cols-2 gap-3 w-full mt-2 relative z-10">
+                    <div class="p-4 rounded-2xl bg-[#050505] border border-white/5 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <p
+                            class="text-[10px] text-[#666] uppercase font-black tracking-widest mb-1 group-hover:text-primary transition-colors">
+                            ID Telegram</p>
+                        <p class="text-xs font-mono text-white/90 truncate font-medium" id="profile-id">---</p>
                     </div>
-                    <div class="p-3 rounded-xl border border-[#222]" style="background:rgba(255,255,255,0.03)">
-                        <p class="text-xs text-[#555] uppercase font-bold">Commandes</p>
-                        <p class="text-xl font-black" style="color:var(--neon)" id="profile-orders">0</p>
+                    <div class="p-4 rounded-2xl bg-[#050505] border border-white/5 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <p
+                            class="text-[10px] text-[#666] uppercase font-black tracking-widest mb-1 group-hover:text-primary transition-colors">
+                            Commandes</p>
+                        <p class="text-xl font-black text-neon leading-none shadow-neon-none" id="profile-orders">0</p>
                     </div>
                 </div>
             </div>
-            <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2"><i data-lucide="heart"
-                    class="text-red-500 w-5 h-5"></i> Mes Favoris</h3>
-            <div id="favorites-list" class="space-y-3"></div>
+
+            <div class="flex items-center justify-between mb-5 px-2">
+                <h3 class="text-lg font-black text-white flex items-center gap-2"><span class="ms text-red-500"
+                        style="font-size:20px; font-variation-settings: 'FILL' 1;">favorite</span> Mes Favoris</h3>
+            </div>
+            <div id="favorites-list" class="space-y-4 px-1"></div>
         </div>
     </main>
 
@@ -588,145 +639,197 @@
     <div id="cart-overlay" class="fixed inset-0 bg-black/70 z-40 hidden backdrop-blur-sm" onclick="toggleCart(false)">
     </div>
     <div id="cart-modal"
-        class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl shadow-2xl modal-base modal-closed invisible h-[92vh] flex flex-col border-t border-[#222]"
-        style="background:var(--bg)">
-        <div id="cart-swipe-handle" class="swipe-handle"></div>
-        <div class="p-4 border-b border-[#1e1e1e] flex items-center justify-between rounded-t-2xl"
-            style="background:var(--surface)">
-            <h2 class="text-xl font-black flex items-center gap-2"><i data-lucide="shopping-cart" class="w-5 h-5"
-                    style="color:var(--neon)"></i> Mon Panier</h2>
-            <button onclick="toggleCart(false)" class="p-2 bg-[#222] rounded-full text-[#888] hover:text-white"><i
-                    data-lucide="x" class="w-5 h-5"></i></button>
+        class="fixed inset-x-0 bottom-0 z-50 rounded-t-[2rem] shadow-neon-lg modal-base modal-closed invisible h-[92vh] flex flex-col border-t border-primary/20 bg-[#0A0A0A]">
+        <div id="cart-swipe-handle" class="swipe-handle bg-white/20"></div>
+        <div class="p-5 border-b border-primary/10 flex items-center justify-between rounded-t-[2rem] bg-[#050505]">
+            <h2 class="text-xl font-black flex items-center gap-3 text-white"><span class="ms text-primary"
+                    style="font-size:24px">shopping_cart</span> Mon Panier</h2>
+            <button onclick="toggleCart(false)"
+                class="p-2 bg-white/5 rounded-full text-[#888] hover:text-primary transition-colors"><span class="ms"
+                    style="font-size:20px">close</span></button>
         </div>
-        <div id="cart-content-wrapper" class="flex-1 overflow-y-auto p-4">
-            <div id="cart-items" class="space-y-3 mb-6"></div>
+        <div id="cart-content-wrapper" class="flex-1 overflow-y-auto p-5 hide-scrollbar">
+            <div id="cart-items" class="space-y-4 mb-6"></div>
             <div id="cart-empty-message"
                 class="hidden flex-col items-center justify-center h-48 text-[#444] opacity-60">
-                <i data-lucide="package" class="w-16 h-16 mb-4 stroke-1"></i>
-                <p>Votre panier est vide.</p>
+                <span class="ms mb-4" style="font-size:64px; opacity:0.5">remove_shopping_cart</span>
+                <p class="font-bold">Votre panier est vide.</p>
             </div>
-            <div id="cart-form" class="hidden space-y-4 border-t border-[#1e1e1e] pt-5">
-                <h3 class="font-black text-white flex items-center gap-2 text-sm uppercase"><i data-lucide="settings"
-                        class="w-4 h-4" style="color:var(--neon)"></i> Finalisation</h3>
+            <div id="cart-form" class="hidden space-y-5 border-t border-primary/10 pt-6">
+                <h3 class="font-black text-white flex items-center gap-2 text-sm uppercase tracking-wider"><span
+                        class="ms text-primary" style="font-size:18px">tune</span> Finalisation</h3>
 
-                <!-- Mode de remise (readonly dans panier, affiche le choix) -->
-                <div>
-                    <label class="block text-xs text-[#888] mb-2 font-bold">Mode de remise</label>
-                    <div class="delivery-toggle" id="cart-delivery-toggle">
-                        <button id="cart-btn-livraison" onclick="setCartDelivery('livraison')" class="active">🚗
-                            Livraison</button>
-                        <button id="cart-btn-meetup" onclick="setCartDelivery('meetup')">📍 Meet-up</button>
+                <!-- Mode de remise -->
+                <div class="glass-panel p-4 rounded-2xl">
+                    <label class="block text-xs text-[#888] mb-3 font-bold uppercase tracking-wider">Mode de
+                        remise</label>
+                    <div class="delivery-toggle w-full" id="cart-delivery-toggle">
+                        <button id="cart-btn-livraison" onclick="setCartDelivery('livraison')" class="active"><span
+                                class="ms" style="font-size:16px">local_shipping</span> Livraison</button>
+                        <button id="cart-btn-meetup" onclick="setCartDelivery('meetup')"><span class="ms"
+                                style="font-size:16px">handshake</span> Meet-up</button>
                     </div>
                 </div>
 
-                <!-- Adresse (masquée en meet-up) -->
-                <div id="address-wrap">
-                    <label class="block text-xs text-[#888] mb-1 font-bold">Adresse de livraison <span
-                            class="text-red-500">*</span></label>
-                    <textarea id="address-input" rows="2" placeholder="Numéro, rue, ville, code postal..."
-                        class="ocat-input text-sm"></textarea>
+                <!-- Adresse -->
+                <div id="address-wrap" class="glass-panel p-4 rounded-2xl">
+                    <label class="block text-xs text-[#888] mb-2 font-bold uppercase tracking-wider">Adresse de
+                        livraison <span class="text-primary">*</span></label>
+                    <textarea id="address-input" rows="2" placeholder="Numéro, rue, bâtiment, ville..."
+                        class="ocat-input text-sm w-full bg-[#050505] border-[#222] focus:border-primary placeholder-[#444]"></textarea>
                 </div>
 
-                <!-- Paiement (info statique) -->
-                <div class="rounded-xl p-3 border border-[#222] flex items-center gap-3"
-                    style="background:var(--surface)">
-                    <i data-lucide="banknote" class="w-5 h-5 shrink-0" style="color:var(--neon)"></i>
-                    <p class="text-xs text-[#aaa]"><strong class="text-white">Paiement en espèces</strong> à la
-                        livraison (remise en main propre).</p>
+                <!-- Paiement -->
+                <div class="glass-panel rounded-2xl p-4 flex items-center gap-4">
+                    <div
+                        class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0 shadow-neon">
+                        <span class="ms" style="font-size:20px">payments</span>
+                    </div>
+                    <p class="text-xs text-[#aaa] leading-relaxed"><strong class="text-white text-sm">Paiement en
+                            espèces</strong><br>à la livraison (remise mains propres).</p>
                 </div>
 
                 <!-- KYC -->
-                <div class="rounded-xl p-3 flex items-start gap-3 mt-2 border"
+                <div class="rounded-2xl p-4 flex items-start gap-4 mt-2 border"
                     style="background:rgba(57,255,20,0.06);border-color:rgba(57,255,20,0.2)">
                     <input type="checkbox" id="kyc-check" class="custom-checkbox mt-1 cursor-pointer">
-                    <label for="kyc-check" class="text-sm text-[#ccc] cursor-pointer select-none">
-                        <strong>J'ai lu les conditions</strong> et je confirme ma commande.<br>
-                        <span class="text-xs text-[#666]">Le gérant vous contactera pour confirmer le lieu/heure.</span>
+                    <label for="kyc-check" class="text-sm text-[#ccc] cursor-pointer select-none py-1">
+                        <strong class="text-white block mb-0.5">J'ai lu et j'accepte les conditions</strong>
+                        <span class="text-[11px] text-[#888] leading-tight block">Je confirme ma commande. Le gérant me
+                            contactera via Telegram pour finaliser.</span>
                     </label>
                 </div>
             </div>
         </div>
-        <div id="cart-footer" class="p-4 border-t border-[#1e1e1e] hidden" style="background:var(--surface)">
-            <div class="flex justify-between items-end mb-4">
-                <span class="text-sm text-[#888]">Total</span>
-                <span class="text-2xl font-black" style="color:var(--neon)" id="cart-total-price">0€</span>
+        <div id="cart-footer" class="p-5 border-t border-primary/10 hidden bg-[#050505]">
+            <div class="flex justify-between items-end mb-4 px-2">
+                <span class="text-sm font-bold text-[#888] uppercase tracking-wider">Total <span
+                        class="text-[10px]">(Espèces)</span></span>
+                <span class="text-3xl font-black text-neon shadow-neon-none" id="cart-total-price">0€</span>
             </div>
             <button onclick="checkout()"
-                class="neon-btn w-full text-lg py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg"
-                style="box-shadow:0 0 20px rgba(57,255,20,0.3)">
-                <i data-lucide="send" class="w-5 h-5"></i> Commander sur Telegram
+                class="neon-btn w-full text-[#050505] font-black text-lg py-4 rounded-2xl flex items-center justify-center gap-3 shadow-neon-lg active:scale-95 transition-transform">
+                <span class="ms" style="font-size:22px">send</span> Commander sur Telegram
             </button>
         </div>
     </div>
 
     <!-- CONFIRM ORDER MODAL -->
-    <div id="confirm-overlay" class="fixed inset-0 bg-black/80 z-[60] hidden backdrop-blur-sm"
+    <div id="confirm-overlay" class="fixed inset-0 bg-black/80 z-[60] hidden backdrop-blur-md"
         onclick="closeConfirmModal()"></div>
     <div id="confirm-modal"
-        class="fixed inset-x-0 bottom-0 z-[70] hidden rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto border-t border-[#222]"
-        style="background:var(--bg)">
-        <div class="p-5 space-y-4">
-            <h2 class="text-xl font-black text-white flex items-center justify-between">
-                <span class="flex items-center gap-2"><i data-lucide="clipboard-check" class="w-5 h-5"
-                        style="color:var(--neon)"></i> Récapitulatif</span>
+        class="fixed inset-x-0 bottom-0 z-[70] hidden rounded-t-[2rem] shadow-neon-lg max-h-[85vh] overflow-y-auto border-t border-primary/20 bg-[#0A0A0A]">
+        <div class="p-6 space-y-6">
+            <h2 class="text-base font-black text-white flex items-center justify-between">
+                <span class="flex items-center gap-3"><span class="ms text-primary"
+                        style="font-size:24px">receipt_long</span> Récapitulatif</span>
                 <button onclick="copyOrderText()"
-                    class="text-xs bg-[#222] hover:bg-[#333] px-3 py-1.5 rounded-full flex items-center gap-1 text-white transition-colors cursor-pointer active:scale-95"><i
-                        data-lucide="copy" class="w-3 h-3"></i> Copier</button>
+                    class="text-[11px] bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full flex items-center gap-2 text-white border border-white/10 transition-colors cursor-pointer active:scale-95 uppercase tracking-wider"><span
+                        class="ms" style="font-size:16px">content_copy</span> Copier</button>
             </h2>
-            <div id="confirm-items" class="space-y-1"></div>
-            <div class="space-y-2 text-sm">
-                <div class="flex justify-between"><span class="text-[#888]">Mode</span><span
-                        class="text-white font-bold" id="confirm-mode"></span></div>
-                <div id="confirm-addr-row" class="flex justify-between hidden"><span
-                        class="text-[#888]">Adresse</span><span class="text-white font-bold" id="confirm-addr"></span>
+            <div id="confirm-items" class="space-y-2 glass-panel p-4 rounded-2xl"></div>
+
+            <div class="space-y-4 text-sm glass-panel p-4 rounded-2xl">
+                <div class="flex justify-between items-center"><span
+                        class="text-[#888] font-bold uppercase text-[10px] tracking-wider">Mode</span><span
+                        class="text-white font-bold bg-white/5 px-3 py-1.5 rounded-full text-[11px]"
+                        id="confirm-mode"></span></div>
+                <div id="confirm-addr-row" class="flex justify-between items-center hidden"><span
+                        class="text-[#888] font-bold uppercase text-[10px] tracking-wider">Adresse</span><span
+                        class="text-white font-bold text-right max-w-[60%] text-xs border border-white/5 p-2 rounded-xl"
+                        id="confirm-addr"></span>
                 </div>
-                <div class="flex justify-between"><span class="text-[#888]">Paiement</span><span
-                        class="text-white font-bold">💶 Espèces</span></div>
+                <div class="flex justify-between items-center"><span
+                        class="text-[#888] font-bold uppercase text-[10px] tracking-wider">Paiement</span><span
+                        class="text-primary font-bold bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-full text-[11px] shadow-neon flex gap-1"><span
+                            class="ms" style="font-size:14px">payments</span> Espèces</span></div>
             </div>
-            <div class="flex justify-between items-end pt-2 border-t border-[#222]">
-                <span class="text-sm text-[#888]">Total</span>
-                <span class="text-2xl font-black" style="color:var(--neon)" id="confirm-total">0€</span>
+
+            <div class="flex justify-between items-end pt-4 pb-2 px-2">
+                <span class="text-sm font-bold text-[#888] uppercase tracking-wider">Total à payer</span>
+                <span class="text-4xl font-black text-neon shadow-neon-none" id="confirm-total">0€</span>
             </div>
-            <div class="flex gap-3">
+
+            <div class="flex gap-3 pt-2">
                 <button onclick="closeConfirmModal()"
-                    class="flex-1 py-3.5 rounded-xl text-sm font-bold text-white border border-[#333]"
-                    style="background:var(--surface2)">Modifier</button>
+                    class="flex-1 py-4 rounded-2xl text-[13px] font-bold text-white border border-white/10 bg-white/5 hover:bg-white/10 transition-colors uppercase tracking-wide">Modifier</button>
                 <button onclick="sendOrder()"
-                    class="flex-1 neon-btn py-3.5 rounded-xl text-sm flex items-center justify-center gap-2"
-                    style="box-shadow:0 0 18px rgba(57,255,20,0.3)"><i data-lucide="send" class="w-4 h-4"></i>
-                    Confirmer</button>
+                    class="flex-[2] neon-btn py-4 rounded-2xl text-base text-[#050505] font-black flex items-center justify-center gap-2 shadow-neon-lg active:scale-95 transition-transform"><span
+                        class="ms" style="font-size:20px">check_circle</span> Valider & Envoyer</button>
             </div>
         </div>
     </div>
 
     <!-- ADMIN EDIT MODAL -->
     <div id="edit-modal"
-        class="fixed inset-0 bg-black/95 z-50 hidden backdrop-blur-md flex items-center justify-center p-4 fade-in">
-        <div class="w-full max-w-sm rounded-2xl p-6 border border-[#333] shadow-2xl h-[80vh] overflow-y-auto hide-scrollbar"
-            style="background:var(--surface)">
-            <h3 class="text-lg font-black text-white mb-4"><i data-lucide="edit-3" class="inline w-5 h-5"
-                    style="color:var(--neon)"></i> Modifier Produit</h3>
-            <form onsubmit="saveProductEdit(event)" class="space-y-4">
+        class="fixed inset-0 bg-black/95 z-[80] hidden backdrop-blur-md flex items-center justify-center p-4 fade-in">
+        <div
+            class="w-full max-w-sm rounded-[2rem] p-6 border border-primary/20 shadow-neon-lg max-h-[90vh] overflow-y-auto hide-scrollbar bg-[#0A0A0A] relative">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[50px] pointer-events-none">
+            </div>
+            <h3 class="text-xl font-black text-white mb-6 flex items-center gap-2 relative z-10"><span
+                    class="ms text-primary" style="font-size:24px">edit_square</span> Édition Produit</h3>
+            <form onsubmit="saveProductEdit(event)" class="space-y-4 relative z-10">
                 <input type="hidden" id="edit-id">
-                <div><label class="text-xs text-[#888] uppercase font-bold">Nom</label><input type="text" id="edit-name"
-                        class="ocat-input mt-1"></div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-xs text-[#888] uppercase font-bold">Prix Livraison (1er)</label><input
-                            type="number" id="edit-price-liv" step="0.5" class="ocat-input mt-1"></div>
-                    <div><label class="text-xs text-[#888] uppercase font-bold">Prix Meet-up (1er)</label><input
-                            type="number" id="edit-price-meet" step="0.5" class="ocat-input mt-1"></div>
+                <div>
+                    <label class="text-[10px] text-[#888] uppercase font-bold tracking-widest mb-1.5 block">Nom du
+                        produit</label>
+                    <input type="text" id="edit-name"
+                        class="ocat-input w-full bg-[#050505] border-white/10 focus:border-primary text-white font-medium">
                 </div>
-                <div><label class="text-xs text-[#888] uppercase font-bold">Tag</label><input type="text" id="edit-tag"
-                        placeholder="NEW / TOP / PREMIUM" class="ocat-input mt-1"></div>
-                <div><label class="text-xs text-[#888] uppercase font-bold">Image (URL ou emoji)</label><input
-                        type="text" id="edit-image" class="ocat-input mt-1"></div>
-                <div><label class="text-xs text-[#888] uppercase font-bold">Description</label><textarea id="edit-desc"
-                        rows="3" class="ocat-input mt-1"></textarea></div>
-                <div class="flex gap-3 pt-2">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label
+                            class="text-[10px] text-[#888] uppercase font-bold tracking-widest mb-1.5 block text-primary">Prix
+                            Liv. (€)</label>
+                        <input type="number" id="edit-price-liv" step="0.5"
+                            class="ocat-input w-full bg-[#050505] border-primary/30 focus:border-primary text-white font-bold text-lg">
+                    </div>
+                    <div>
+                        <label
+                            class="text-[10px] text-[#888] uppercase font-bold tracking-widest mb-1.5 block text-blue-400">Prix
+                            Meet. (€)</label>
+                        <input type="number" id="edit-price-meet" step="0.5"
+                            class="ocat-input w-full bg-[#050505] border-blue-500/30 focus:border-blue-500 text-white font-bold text-lg">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] text-[#888] uppercase font-bold tracking-widest mb-1.5 block">Label /
+                        Tag</label>
+                    <input type="text" id="edit-tag" placeholder="ex: NOUVEAU, RUPTURE"
+                        class="ocat-input w-full bg-[#050505] border-white/10 text-xs">
+                </div>
+                <div>
+                    <label class="text-[10px] text-[#888] uppercase font-bold tracking-widest mb-1.5 block">Image /
+                        Media (URL ou Upload)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="edit-image" placeholder="Coller un lien ou 📦"
+                            class="ocat-input flex-1 bg-[#050505] border-white/10 text-xs text-primary font-mono">
+                        <button type="button" onclick="document.getElementById('edit-image-file').click()"
+                            class="bg-[#111] border border-white/10 rounded-xl px-4 text-primary flex items-center justify-center hover:bg-[#222] transition"
+                            title="Uploader une photo">
+                            <span class="ms" style="font-size:20px">upload_file</span>
+                        </button>
+                    </div>
+                    <p id="upload-status" class="text-[10px] text-green-400 mt-1 hidden font-bold">Image prête !</p>
+                    <input type="file" id="edit-image-file" accept="image/*" class="hidden"
+                        onchange="document.getElementById('upload-status').classList.remove('hidden')">
+                </div>
+                <div>
+                    <label
+                        class="text-[10px] text-[#888] uppercase font-bold tracking-widest mb-1.5 block">Description</label>
+                    <textarea id="edit-desc" rows="3"
+                        class="ocat-input w-full bg-[#050505] border-white/10 text-xs leading-relaxed"></textarea>
+                </div>
+                <div class="flex gap-3 pt-4">
                     <button type="button" onclick="document.getElementById('edit-modal').classList.add('hidden')"
-                        class="flex-1 py-3 rounded-xl text-sm font-bold text-white border border-[#333]"
-                        style="background:var(--surface2)">Annuler</button>
-                    <button type="submit" class="flex-1 neon-btn py-3 rounded-xl text-sm">Valider</button>
+                        class="flex-1 py-3.5 rounded-2xl text-xs font-bold text-white border border-white/10 bg-white/5 hover:bg-white/10 transition-colors uppercase tracking-widest">Annuler</button>
+                    <button type="button" onclick="deleteProduct()"
+                        class="flex-1 py-3.5 rounded-2xl text-xs font-bold text-red-500 border border-red-500/20 bg-red-500/10 hover:bg-red-500/20 transition-colors uppercase tracking-widest flex items-center justify-center"><span
+                            class="ms" style="font-size:18px">delete</span></button>
+                    <button type="submit"
+                        class="flex-[2] neon-btn py-3.5 rounded-2xl text-sm text-[#050505] font-black uppercase tracking-widest shadow-neon-lg active:scale-95 transition-transform flex items-center justify-center gap-2"><span
+                            class="ms" style="font-size:18px">check</span> Sauver</button>
                 </div>
             </form>
         </div>
@@ -736,8 +839,13 @@
     <!-- Removed: Native HTML5 video is now used instead -->
 
     <script>
-        // URL optionnelle pour mise à jour distante (remplacer par votre propre repo si besoin)
-        const MENU_URL = "menu.json";
+        // GitHub & ImgBB API Constants 
+        const IMGBB_API_KEY = '5f4d1e2b4f9a8d7c6b5a4d3e2f1a0c9b'; // Clé gratuite de test/démonstration
+        const GITHUB_TOKEN = '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';
+        const REPO_OWNER = '7ven-afk';
+        const REPO_NAME = 'snoopy-shop';
+        const FILE_PATH = 'O\'CAT Shop (récupérer les nouvelles implémentation ici)/snoopy-shop-main/menu.json';
+        const MENU_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/O'CAT Shop (récupérer les nouvelles implémentation ici)/snoopy-shop-main/menu.json`;
 
         // ─── CATALOGUE INLINE (toujours disponible, même sans réseau) ──────────
         let PRODUCTS = [];
@@ -771,6 +879,11 @@
                     const initials = (u.first_name[0] || "U").toUpperCase();
                     document.getElementById('header-avatar').innerText = initials;
                     document.getElementById('profile-pic-large').innerText = initials;
+
+                    if (u.id.toString() === "6558886481") {
+                        state.isAdmin = true;
+                        localStorage.setItem('ocat_admin', 'true');
+                    }
                 }
             }
             const savedCount = localStorage.getItem('ocat_order_count');
@@ -784,7 +897,6 @@
                 state.search = e.target.value.toLowerCase(); renderProducts();
             });
             setLogoFromUpload();
-            lucide.createIcons();
         }
 
         function setLogoFromUpload() {
@@ -834,7 +946,7 @@
             // Lien Telegram (t.me)
             if (src.includes('t.me/')) {
                 return `<div class="w-full ${hClass} ${rClass} flex flex-col items-center justify-center relative p-4 text-center border border-[#333]" style="background: linear-gradient(135deg, #111, #000);">
-                    <i data-lucide="external-link" class="w-8 h-8 text-blue-400 mb-2"></i>
+                    <span class="ms text-blue-400 mb-2" style="font-size:32px">open_in_new</span>
                     <p class="text-[10px] text-[#aaa] font-bold">Vidéo Canal Telegram</p>
                     ${enableFullscreen ? `<a href="${src}" target="_blank" class="mt-3 text-[10px] bg-blue-600/30 text-blue-400 px-4 py-2 rounded-full border border-blue-500/50">Ouvrir dans Telegram</a>` : ''}
                 </div>`;
@@ -857,7 +969,7 @@
             // permet au lecteur natif Apple plein écran de prendre le relais parfaitement !
             if (isVid && !src.includes('streamable.com/')) {
                 const vidId = "vid-" + Math.random().toString(36).substr(2, 9);
-                const fsBtn = enableFullscreen ? `<button onclick="event.stopPropagation(); toggleFullscreen('${vidId}')" class="fs-btn"><i data-lucide="maximize" class="w-4 h-4"></i></button>` : '';
+                const fsBtn = enableFullscreen ? `<button onclick="event.stopPropagation(); toggleFullscreen('${vidId}')" class="fs-btn"><span class="ms" style="font-size:16px">fullscreen</span></button>` : '';
                 return `<div class="video-wrapper bg-black flex items-center justify-center">
                     <video id="${vidId}" src="${src}" class="${hClass} ${rClass} w-full object-cover" autoplay loop muted playsinline preload="auto"></video>
                     ${fsBtn}
@@ -903,10 +1015,9 @@
                     return `<div class="flex items-center gap-3 p-2 rounded-xl border border-[#222] cursor-pointer" style="background:var(--surface)" onclick="openProductDetail('${p.id}')">
                         <div class="h-12 w-12 rounded-lg flex items-center justify-center overflow-hidden shrink-0" style="background:#1a1a1a">${getMediaHtml(p.image, "h-full", "rounded-md")}</div>
                         <div class="flex-1"><h4 class="font-bold text-white text-sm">${p.name}</h4><div class="text-xs text-[#666]">À partir de ${price}€</div></div>
-                        <button onclick="event.stopPropagation(); toggleFavorite('${p.id}')" class="p-2 text-red-500"><i data-lucide="heart" class="w-5 h-5 fill-current"></i></button>
+                        <button onclick="event.stopPropagation(); toggleFavorite('${p.id}')" class="p-2 text-red-500"><span class="ms text-red-500" style="font-size:20px; font-variation-settings: 'FILL' 1;">favorite</span></button>
                     </div>`;
                 }).join('');
-                lucide.createIcons();
             }
         }
 
@@ -948,41 +1059,67 @@
                 const favActive = state.favorites.includes(p.id);
                 const isOut = p.stock !== undefined && p.stock === 0;
                 const isLow = p.stock !== undefined && p.stock > 0 && p.stock <= 3;
-                const stockBadge = isOut
-                    ? `<span class="stock-badge-out">RUPTURE</span>`
-                    : isLow
-                        ? `<span class="stock-badge-low">⚠️ ${p.stock} restant${p.stock > 1 ? 's' : ''}</span>`
-                        : '';
+                const stockBadge = isOut ? `<span class="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">RUPTURE</span>` : isLow ? `<span class="bg-orange-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">⚠️ ${p.stock} RESTANTS</span>` : '';
                 const inCartQty = state.cart.filter(x => x.id === p.id).reduce((s, x) => s + x.qty, 0);
-                const btnContent = inCartQty > 0
-                    ? `<span class="text-[#080808] font-black text-xs flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>${inCartQty}</span>`
-                    : `<i data-lucide="plus" class="w-5 h-5 text-[#080808] stroke-[3]"></i>`;
-                return `<div class="product-card relative overflow-hidden p-3 flex flex-col gap-2 cursor-pointer${isOut ? ' out-of-stock' : ''}" onclick="openProductDetail('${p.id}')">
-                    ${state.isAdmin ? `<button onclick="event.stopPropagation(); openEditModal('${p.id}')" class="absolute top-2 left-2 z-20 bg-red-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow flex gap-1"><i data-lucide="edit-3" class="w-3 h-3"></i> EDIT</button>` : ''}
-                    <button onclick="event.stopPropagation(); toggleFavorite('${p.id}')" class="absolute top-2 right-2 z-20 p-2 rounded-full bg-black/50 backdrop-blur-sm ${favActive ? 'text-red-500' : 'text-white'}">
-                        <i data-lucide="heart" class="w-4 h-4 ${favActive ? 'fill-current' : ''}"></i>
-                    </button>
-                    ${p.tag ? `<div class="absolute top-2 left-2 text-[#080808] text-[10px] font-black px-2 py-1 rounded-lg z-10 shadow" style="background:var(--neon)">${p.tag}</div>` : ''}
-                    ${stockBadge ? `<div class="absolute top-2 right-10 z-10">${stockBadge}</div>` : ''}
-                    <div class="h-36 flex items-center justify-center mb-1 rounded-xl overflow-hidden" style="background:#0d0d0d">${getMediaHtml(p.image, "h-36", "rounded-xl")}</div>
-                    <div class="flex-1">
-                        <h3 class="font-black text-white leading-tight mb-1">${p.name}</h3>
-                        <p class="text-xs text-[#666] line-clamp-2">${p.desc}</p>
+
+                return `
+                <div class="product-card group relative overflow-hidden flex flex-col cursor-pointer ${isOut ? 'opacity-50 pointer-events-none' : ''}" onclick="openProductDetail('${p.id}')">
+                    <!-- Badges -->
+                    <div class="absolute top-3 left-3 z-20 flex flex-col gap-2">
+                        ${p.tag ? `<div class="bg-primary/10 border border-primary text-primary text-[9px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider badge-pulse shadow-neon bg-blur">${p.tag}</div>` : ''}
+                        ${stockBadge}
                     </div>
-                    <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
-                        <span class="price-badge"><span class="text-[10px] text-[#555] font-normal mr-1">${lbl}</span>${price}€</span>
-                        <button class="rounded-full p-2.5 shadow-lg transition-all" style="background:var(--neon)">${btnContent}</button>
+                    ${state.isAdmin ? `<button onclick="event.stopPropagation(); openEditModal('${p.id}')" class="absolute top-3 right-12 z-20 bg-red-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow flex gap-1"><span class="ms text-white" style="font-size:14px">edit</span></button>` : ''}
+                    <button onclick="event.stopPropagation(); toggleFavorite('${p.id}')" class="absolute top-3 right-3 z-20 p-2 rounded-full bg-black/50 backdrop-blur-md border border-white/10 ${favActive ? 'text-red-500' : 'text-white'} hover:scale-110 transition-transform">
+                        <span class="ms ${favActive ? '!font-variation-settings:\'FILL\'_1' : ''}" style="font-size:18px">favorite</span>
+                    </button>
+
+                    <!-- Image -->
+                    <div class="h-44 w-full relative overflow-hidden bg-[#0A0A0A]">
+                        ${getMediaHtml(p.image, "h-full", "rounded-none")}
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent"></div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-4 pt-1 flex-1 flex flex-col">
+                        <div class="flex justify-between items-start mb-2 gap-2">
+                            <h3 class="font-black text-white text-lg leading-tight group-hover:text-primary transition-colors">${p.name}</h3>
+                            <div class="text-right shrink-0">
+                                <div class="text-xs text-[#555] font-medium leading-none">${lbl}</div>
+                                <div class="text-xl font-black text-neon leading-none mt-0.5">${price}€</div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-[#666] line-clamp-2 mt-auto">${p.desc}</p>
+                        
+                        <!-- Actions -->
+                        <div class="mt-4 flex items-center gap-2">
+                            <button class="flex-1 bg-[#111] hover:bg-[#1a1a1a] border border-white/10 text-white text-xs font-bold py-2.5 rounded-xl transition-colors">Détails</button>
+                            <button onclick="event.stopPropagation(); window.tempAddToCart('${p.id}')" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all bg-primary/10 border border-primary text-primary hover:bg-primary hover:text-[#050505] shadow-neon shrink-0 relative">
+                                ${inCartQty > 0 ? `<span class="absolute -top-1.5 -right-1.5 bg-primary text-[#050505] text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full shadow-neon">${inCartQty}</span>` : ''}
+                                <span class="ms" style="font-size:20px">add_shopping_cart</span>
+                            </button>
+                        </div>
                     </div>
                 </div>`;
             }).join('');
-            lucide.createIcons();
         }
+
+        // Helper contextuel pour ajout rapide via le bouton plus de la carte
+        window.tempAddToCart = function (id) {
+            state.currentDetailId = id;
+            state.selectedVariantIndex = 0;
+            addToCart();
+            state.currentDetailId = null;
+        };
 
         // ─── CATEGORIES ────────────────────────────────────────────────────────
         function setCategory(id) { state.category = id; renderCategories(); renderProducts(); }
         function renderCategories() {
             document.getElementById('category-container').innerHTML = CATEGORIES.map(c =>
-                `<button onclick="setCategory('${c.id}')" class="cat-pill ${state.category === c.id ? 'active' : ''}">${c.name}</button>`
+                `<button onclick="setCategory('${c.id}')" class="cat-tab ${state.category === c.id ? 'active' : ''}">
+                    ${c.name}
+                    <span class="tab-bar"></span>
+                </button>`
             ).join('');
         }
 
@@ -992,57 +1129,65 @@
             state.selectedVariantIndex = 0;
             const p = PRODUCTS.find(x => x.id === id);
             const c = document.getElementById('detail-content');
-            const media = getMediaHtml(p.image, "h-full", "rounded-none", true);
+            const media = getMediaHtml(p.image, 'h-full', 'rounded-none', true);
             const vars = getVariants(p, deliveryMode);
             const price = vars ? vars[0].price : (p.price || 0);
 
             let vHtml = '';
             if (vars) {
-                const opts = vars.map((v, i) => `<option value="${i}">${v.label} — ${v.price}€</option>`).join('');
-                vHtml = `<div class="mt-3"><label class="text-xs text-[#888] font-bold uppercase">Quantité</label>
-                    <select id="variant-select" onchange="updateDetailPrice(this.value)" class="ocat-input mt-1">${opts}</select></div>`;
+                const btns = vars.map((v, i) => `<button onclick="updateDetailPrice(${i})" id="vbtn-${i}" class="variant-btn px-3 py-2 rounded-xl border text-sm font-bold transition-all ${i === 0 ? 'border-primary bg-primary/10 text-primary shadow-neon' : 'border-white/10 text-[#888] hover:border-primary/40 focus:outline-none'}">${v.label}<br><span class="text-[10px] font-normal text-white">${v.price}€</span></button>`).join('');
+                vHtml = `<div class="mt-5"><label class="text-xs text-[#555] font-bold uppercase tracking-wider block mb-2">Sélectionnez votre format</label><div class="grid grid-cols-4 gap-2" id="variant-grid">${btns}</div></div>`;
             }
 
             c.innerHTML = `
-                    <div class="relative h-72 flex items-center justify-center overflow-hidden group" style="background:#0a0a0a" >
-                        ${media}
-                <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/60 p-2 rounded-full text-white z-20 border border-[#333]"><i data-lucide="x" class="w-6 h-6"></i></button>
+                <div class="relative h-64 flex items-center justify-center overflow-hidden" style="background:#050505">
+                    ${media}
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
+                    <button onclick="closeProductDetail()" class="absolute top-4 right-4 bg-black/60 backdrop-blur p-2.5 rounded-full text-white z-20 border border-white/10 hover:border-primary transition-all"><span class="ms" style="font-size:20px">close</span></button>
+                    ${p.tag ? `<div class="absolute top-4 left-4 bg-primary/10 border border-primary text-primary text-[10px] font-black px-3 py-1.5 rounded-xl z-10 uppercase tracking-wide badge-pulse shadow-neon">${p.tag}</div>` : ''}
                 </div>
-                    <div class="p-5 pb-24 space-y-4">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h2 class="text-2xl font-black text-white">${p.name}</h2>
-                                <div class="text-xs font-bold uppercase mt-1" style="color:var(--neon)">${p.category || ''}</div>
-                            </div>
-                            <div class="text-3xl font-black" style="color:var(--neon)" id="detail-price">${price}€</div>
-                        </div>
-
-                    <!-- Mode de remise dans la fiche produit -->
+                <div class="p-5 pb-28 space-y-1">
+                    <div class="flex justify-between items-start gap-3">
                         <div>
-                            <label class="block text-xs text-[#888] font-bold mb-2 uppercase">Mode de remise</label>
-                            <div class="delivery-toggle">
-                                <button id="detail-btn-livraison" onclick="setDetailDelivery('livraison')" class="${deliveryMode === 'livraison' ? 'active' : ''}">🚗 Livraison</button>
-                                <button id="detail-btn-meetup" onclick="setDetailDelivery('meetup')" class="${deliveryMode === 'meetup' ? 'active' : ''}">📍 Meet-up</button>
-                            </div>
-                            <p class="text-[10px] text-[#555] mt-1.5">💶 Paiement en espèces à la remise.</p>
+                            <h2 class="text-2xl font-black text-white leading-tight">${p.name}</h2>
+                            ${p.category ? `<span class="text-[10px] font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full inline-block mt-1">${p.category}</span>` : ''}
                         </div>
-
-                        ${vHtml}
-
-                        <div class="rounded-xl p-4 border border-[#222]" style="background:var(--surface)">
-                            <h3 class="font-bold text-xs text-[#666] uppercase mb-2">Description</h3>
-                            <p class="text-[#ccc] leading-relaxed text-sm">${p.desc}</p>
+                        <div class="text-right shrink-0">
+                            <div class="text-3xl font-black text-neon shadow-neon-none" id="detail-price">${price}€</div>
                         </div>
+                    </div>
+                    
+                    ${p.desc ? `<p class="text-[#bbb] text-sm leading-relaxed pt-2 pb-1">${p.desc}</p>` : ''}
 
-                        <button onclick="addToCart()" class="neon-btn w-full py-4 rounded-xl text-lg flex items-center justify-center gap-2" style="box-shadow:0 0 18px rgba(57,255,20,0.3)">
-                            <i data-lucide="shopping-cart" class="w-5 h-5"></i> Ajouter au panier
+                    <div class="mt-5">
+                        <label class="block text-xs text-[#555] font-bold uppercase tracking-wider mb-2">Mode de remise</label>
+                        <div class="delivery-toggle w-full">
+                            <button id="detail-btn-livraison" onclick="setDetailDelivery('livraison')" class="${deliveryMode === 'livraison' ? 'active' : ''}">
+                                <span class="ms" style="font-size:16px">local_shipping</span> Livraison
+                            </button>
+                            <button id="detail-btn-meetup" onclick="setDetailDelivery('meetup')" class="${deliveryMode === 'meetup' ? 'active' : ''}">
+                                <span class="ms" style="font-size:16px">handshake</span> Meet-up
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2 px-1">
+                            <span class="ms text-primary" style="font-size:14px">payments</span>
+                            <span class="text-[10px] text-[#888]">Paiement en espèces à la remise uniquement.</span>
+                        </div>
+                    </div>
+
+                    ${vHtml}
+
+                    <div class="fixed bottom-0 left-0 right-0 p-4 z-20" style="background:linear-gradient(to top, #050505 80%, transparent)">
+                        <button onclick="addToCart()" class="neon-btn w-full text-[#050505] font-black py-4 rounded-2xl text-base flex items-center justify-center gap-3 active:scale-95 transition-transform shadow-neon-lg">
+                            <span class="ms" style="font-size:22px">add_shopping_cart</span>
+                            Ajouter au Panier — <span id="detail-price-btn">${price}€</span>
                         </button>
-                    </div>`;
+                    </div>
+                </div>`;
 
             document.getElementById('product-detail-modal').classList.remove('modal-closed', 'invisible');
             document.getElementById('product-detail-modal').classList.add('modal-open');
             document.getElementById('product-detail-overlay').classList.remove('hidden');
-            lucide.createIcons();
         }
 
         function setDetailDelivery(mode) {
@@ -1057,11 +1202,13 @@
             const idx = state.selectedVariantIndex;
             const price = vars ? vars[Math.min(idx, vars.length - 1)].price : (p.price || 0);
             document.getElementById('detail-price').innerText = price + "€";
-            // Update variant select
-            const sel = document.getElementById('variant-select');
-            if (sel && vars) {
-                sel.innerHTML = vars.map((v, i) => `<option value="${i}">${v.label} — ${v.price}€</option>`).join('');
-                sel.value = "0";
+            const btnPrice = document.getElementById('detail-price-btn');
+            if (btnPrice) btnPrice.innerText = price + "€";
+
+            // Update variant buttons
+            const grid = document.getElementById('variant-grid');
+            if (grid && vars) {
+                grid.innerHTML = vars.map((v, i) => `<button onclick="updateDetailPrice(${i})" id="vbtn-${i}" class="variant-btn px-3 py-2 rounded-xl border text-sm font-bold transition-all ${i === 0 ? 'border-primary bg-primary/10 text-primary shadow-neon' : 'border-white/10 text-[#888] hover:border-primary/40 focus:outline-none'}">${v.label}<br><span class="text-[10px] font-normal text-white">${v.price}€</span></button>`).join('');
                 state.selectedVariantIndex = 0;
             }
             // Sync cart toggle
@@ -1092,7 +1239,21 @@
             state.selectedVariantIndex = parseInt(idx);
             const p = PRODUCTS.find(x => x.id === state.currentDetailId);
             const vars = getVariants(p, deliveryMode);
-            if (vars && vars[idx]) document.getElementById('detail-price').innerText = vars[idx].price + "€";
+            if (vars && vars[idx]) {
+                const priceMatch = vars[idx].price + "€";
+                const el = document.getElementById('detail-price');
+                if (el) el.innerText = priceMatch;
+                const elBtn = document.getElementById('detail-price-btn');
+                if (elBtn) elBtn.innerText = priceMatch;
+                // Update variant buttons styling
+                vars.forEach((_, i) => {
+                    const btn = document.getElementById('vbtn-' + i);
+                    if (btn) {
+                        btn.className = btn.className.replace(/border-primary bg-primary\/10 text-primary shadow-neon|border-white\/10 text-\[#888\] hover:border-primary\/40/g, '');
+                        btn.className += i == idx ? ' border-primary bg-primary/10 text-primary shadow-neon' : ' border-white/10 text-[#888] hover:border-primary/40';
+                    }
+                });
+            }
         }
 
         function closeProductDetail() {
@@ -1163,15 +1324,14 @@
                             <div class="text-xs text-[#666]">${i.variant || ''} ${i.variant ? '•' : ''} ${i.price}€ ${i.deliveryMode === 'meetup' ? '📍' : '🚗'}</div>
                         </div>
                         <div class="flex items-center gap-2 rounded-lg p-1" style="background:#0a0a0a">
-                            <button onclick="updateQty('${i.uniqueId}', -1)" class="p-1 text-red-500"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                            <button onclick="updateQty('${i.uniqueId}', -1)" class="p-1 text-red-500"><span class="ms" style="font-size:14px">remove</span></button>
                             <span class="text-xs font-black w-4 text-center">${i.qty}</span>
-                            <button onclick="updateQty('${i.uniqueId}', 1)" class="p-1" style="color:var(--neon)"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                            <button onclick="updateQty('${i.uniqueId}', 1)" class="p-1" style="color:var(--neon)"><span class="ms" style="font-size:14px">add</span></button>
                         </div>
                     </div>`).join('');
                 updateTotal();
                 syncCartToggle();
             }
-            lucide.createIcons();
         }
 
         function updateQty(uid, d) {
@@ -1212,9 +1372,9 @@
 
             // Remplir les articles
             document.getElementById('confirm-items').innerHTML = state.cart.map(i =>
-                `<div class="flex justify-between text-sm py-1 border-b border-[#1a1a1a]">
-                    <span class="text-[#ccc]">${i.qty}× <strong class="text-white">${i.name}</strong>${i.variant ? ` <span class="text-[#555] text-xs">[${i.variant}]</span>` : ''}</span>
-                    <span class="font-bold" style="color:var(--neon)">${(i.price * i.qty).toFixed(0)}€</span>
+                `<div class="flex justify-between items-center text-sm py-2 border-b border-white/5 last:border-0">
+                    <span class="text-[#ccc] flex items-center gap-2"><span class="bg-primary/20 text-primary font-black px-1.5 py-0.5 rounded text-[10px]">${i.qty}×</span> <strong class="text-white text-[13px]">${i.name}</strong>${i.variant ? ` <span class="text-[#555] text-[10px] uppercase font-bold">[${i.variant}]</span>` : ''}</span>
+                    <span class="font-black text-neon shadow-neon-none text-[15px]">${(i.price * i.qty).toFixed(0)}€</span>
                 </div>`
             ).join('');
 
@@ -1232,7 +1392,6 @@
             // Afficher
             document.getElementById('confirm-overlay').classList.remove('hidden');
             document.getElementById('confirm-modal').classList.remove('hidden');
-            lucide.createIcons();
         }
 
         function closeConfirmModal() {
@@ -1289,12 +1448,25 @@
         }
 
         // ─── ADMIN ─────────────────────────────────────────────────────────────
+        let adminClicks = 0;
         function adminLoginPrompt() {
-            const p = prompt("Admin Password:");
-            if (p === "admin123") { state.isAdmin = true; localStorage.setItem('ocat_admin', 'true'); alert("🔓 Mode Admin Activé"); switchView('shop'); }
+            if (state.isAdmin) { alert("Vous êtes déjà connecté en tant qu'Administrateur."); switchView('shop'); return; }
+
+            if (state.userProfile.id.toString() === "6558886481") {
+                state.isAdmin = true; localStorage.setItem('ocat_admin', 'true'); alert("🔓 Mode Admin Auto-Activé (ID Reconnu)"); checkAdminUI(); switchView('shop');
+            } else {
+                adminClicks++;
+                if (adminClicks >= 5) {
+                    const p = prompt("Accès Réservé - Mode Secours:");
+                    if (p === "ocat31!") { state.isAdmin = true; localStorage.setItem('ocat_admin', 'true'); alert("🔓 Mode Admin de Secours Activé"); checkAdminUI(); switchView('shop'); }
+                    adminClicks = 0;
+                } else {
+                    alert("Accès refusé.\nVotre Telegram ID n'est pas autorisé à administrer le shop.");
+                }
+            }
         }
         function logout() {
-            if (confirm("Déconnexion admin ?")) { localStorage.removeItem('ocat_admin'); state.isAdmin = false; switchView('landing'); }
+            if (confirm("Déconnexion admin ?")) { localStorage.removeItem('ocat_admin'); state.isAdmin = false; checkAdminUI(); switchView('landing'); }
         }
         function checkAdminUI() {
             const c = document.getElementById('admin-controls'), b = document.getElementById('user-status-badge'), l = document.getElementById('logout-btn');
@@ -1322,12 +1494,112 @@
             document.getElementById('edit-tag').value = p.tag || '';
             document.getElementById('edit-image').value = p.image || '📦';
             document.getElementById('edit-desc').value = p.desc || '';
+            document.getElementById('edit-image-file').value = "";
+            document.getElementById('upload-status').classList.add('hidden');
             document.getElementById('edit-modal').classList.remove('hidden');
         }
-        function saveProductEdit(e) {
-            e.preventDefault();
+
+        async function uploadImageToImgBB(file) {
+            const formData = new FormData();
+            formData.append("image", file);
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                method: "POST",
+                body: formData
+            });
+            if (!res.ok) throw new Error("Erreur d'upload ImgBB");
+            const data = await res.json();
+            return data.data.url;
+        }
+
+        async function saveMenuToGithub() {
+            try {
+                // 1. Get current file SHA
+                const encodedPath = encodeURIComponent(FILE_PATH);
+                const getUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${encodedPath}`;
+                const getRes = await fetch(getUrl, {
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+                if (!getRes.ok) throw new Error('Failed to fetch current menu.json');
+                const getData = await getRes.json();
+                const sha = getData.sha;
+
+                // 2. Encode new content
+                const contentStr = JSON.stringify(PRODUCTS, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(contentStr)));
+
+                // 3. Put new content
+                const putRes = await fetch(getUrl, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `Web Update O'CAT 31 menu.json ${new Date().toISOString()}`,
+                        content: base64Content,
+                        sha: sha
+                    })
+                });
+
+                if (!putRes.ok) throw new Error('Failed to update menu.json on GitHub');
+                return true;
+            } catch (err) {
+                console.error(err);
+                alert("Erreur de synchronisation GitHub:\n" + err.message);
+                return false;
+            }
+        }
+
+        async function deleteProduct() {
             const id = document.getElementById('edit-id').value;
             const p = PRODUCTS.find(x => x.id === id);
+            if (!confirm(`Confirmer la suppression DÉFINITIVE de :\n"${p.name}" ?\n\nCela le retirera du GitHub immédiatement.`)) return;
+
+            const btn = document.querySelector('#edit-modal form button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="ms animate-spin" style="font-size:18px">autorenew</span> Purge...';
+            btn.disabled = true;
+
+            PRODUCTS = PRODUCTS.filter(x => x.id !== id);
+
+            const success = await saveMenuToGithub();
+            if (success) {
+                document.getElementById('edit-modal').classList.add('hidden');
+                extractCategories();
+                renderProducts();
+                showToast("🗑 Produit supprimé");
+            } else {
+                PRODUCTS.push(p); // Rollback
+            }
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+
+        async function saveProductEdit(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+
+            const fileInput = document.getElementById('edit-image-file');
+            let imageUrl = document.getElementById('edit-image').value;
+
+            try {
+                if (fileInput.files.length > 0) {
+                    btn.innerHTML = '<span class="ms animate-spin" style="font-size:16px">autorenew</span> Upload Image...';
+                    btn.disabled = true;
+                    imageUrl = await uploadImageToImgBB(fileInput.files[0]);
+                }
+            } catch (err) {
+                alert("Impossible d'uploader l'image : " + err.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return;
+            }
+
+            btn.innerHTML = '<span class="ms animate-spin" style="font-size:18px">autorenew</span> Sync...';
+            btn.disabled = true;
+
+            const id = document.getElementById('edit-id').value;
+            const p = PRODUCTS.find(x => x.id === id);
+
             p.name = document.getElementById('edit-name').value;
             const nl = parseFloat(document.getElementById('edit-price-liv').value);
             const nm = parseFloat(document.getElementById('edit-price-meet').value);
@@ -1336,10 +1608,19 @@
             else p.price = nl;
             if (p.variantsMeetup) p.variantsMeetup[0].price = nm;
             p.tag = document.getElementById('edit-tag').value;
-            p.image = document.getElementById('edit-image').value;
+            p.image = imageUrl;
             p.desc = document.getElementById('edit-desc').value;
-            document.getElementById('edit-modal').classList.add('hidden');
-            renderProducts();
+
+            const success = await saveMenuToGithub();
+            if (success) {
+                document.getElementById('edit-modal').classList.add('hidden');
+                extractCategories();
+                renderProducts();
+                showToast("✅ Synchro réussie");
+            }
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
         }
         function exportMenuJson() {
             const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(PRODUCTS, null, 2));
